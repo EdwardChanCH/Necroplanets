@@ -1,0 +1,26 @@
+[gd_scene load_steps=5 format=3 uid="uid://cgrh7bdqeecvd"]
+
+[ext_resource type="Script" uid="uid://cp1q8btutv152" path="res://scripts/route_2d.gd" id="1_bdg0w"]
+
+[sub_resource type="Curve2D" id="Curve2D_bdg0w"]
+
+[sub_resource type="Gradient" id="Gradient_bdg0w"]
+interpolation_mode = 1
+offsets = PackedFloat32Array(0, 0.523973, 1)
+colors = PackedColorArray(0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_puqdt"]
+gradient = SubResource("Gradient_bdg0w")
+width = 10
+
+[node name="Route2D" type="Node2D"]
+script = ExtResource("1_bdg0w")
+
+[node name="Path" type="Path2D" parent="."]
+curve = SubResource("Curve2D_bdg0w")
+
+[node name="Line" type="Line2D" parent="."]
+texture_repeat = 2
+width = 5.0
+texture = SubResource("GradientTexture1D_puqdt")
+texture_mode = 1

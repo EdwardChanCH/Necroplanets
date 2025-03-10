@@ -1,0 +1,20 @@
+[gd_scene load_steps=2 format=3 uid="uid://u7qpein4i3wi"]
+
+[ext_resource type="Texture2D" uid="uid://d1qupakdqt0bk" path="res://assets/icon_sun.png" id="1_cojbh"]
+
+[node name="Sun" type="Node2D"]
+
+[node name="SunIcon" type="Sprite2D" parent="."]
+texture = ExtResource("1_cojbh")
+
+[node name="SunLabel" type="Label" parent="."]
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = 150.0
+offset_top = -49.5
+offset_right = 299.0
+offset_bottom = 49.5
+grow_vertical = 2
+theme_override_font_sizes/font_size = 72
+text = "SUN"
