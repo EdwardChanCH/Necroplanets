@@ -2,8 +2,8 @@ class_name Camera
 extends Camera2D
 
 @export var camera_zoom: float = 0.2
-@export var camera_zoom_target: float = 0.2
-@export var camera_zoom_min: float = 0.2
+@export var camera_zoom_target: float = camera_zoom
+@export var camera_zoom_min: float = 0.1
 @export var camera_zoom_max: float = 1
 @export var camera_zoom_step: float = 0.05
 @export var camera_zoom_smooth: float = 0.005
@@ -11,7 +11,10 @@ extends Camera2D
 var is_camera_dragging: bool = false
 var old_mouse_pos: Vector2 = Vector2(0 ,0)
 
-func _input(event: InputEvent):
+func _ready() -> void:
+	set_zoom(Vector2(camera_zoom, camera_zoom))
+
+func _input(event: InputEvent) -> void:
 	if event.is_action_pressed("camera_zoom_in"):
 		camera_zoom_target += camera_zoom_step
 		if (camera_zoom_target > camera_zoom_max):
@@ -33,10 +36,7 @@ func _input(event: InputEvent):
 	
 	pass
 
-func _ready():
-	set_zoom(Vector2(camera_zoom, camera_zoom))
-
-func _process(_delta: float):
+func _process(_delta: float) -> void:
 	if (camera_zoom < camera_zoom_target):
 		camera_zoom += camera_zoom_smooth
 		if (camera_zoom > camera_zoom_target):

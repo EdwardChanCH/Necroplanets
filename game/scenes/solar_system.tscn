@@ -1,8 +1,10 @@
-[gd_scene load_steps=4 format=3 uid="uid://bbwps7161hhpl"]
+[gd_scene load_steps=6 format=3 uid="uid://bbwps7161hhpl"]
 
 [ext_resource type="Script" uid="uid://c4auea6ekkba0" path="res://scripts/solar_system.gd" id="1_6rc4i"]
 [ext_resource type="PackedScene" uid="uid://u7qpein4i3wi" path="res://scenes/sun.tscn" id="1_7e15u"]
 [ext_resource type="PackedScene" uid="uid://botsf6hk2rwvk" path="res://scenes/planet.tscn" id="3_5lone"]
+[ext_resource type="Curve" uid="uid://fvx8irbmcje2" path="res://textures/line_ghost_alien_curve.tres" id="4_sjaf3"]
+[ext_resource type="Texture2D" uid="uid://dhq10chflplbl" path="res://textures/line_ghost_alien.tres" id="4_teypr"]
 
 [node name="SolarSystem" type="Node2D"]
 script = ExtResource("1_6rc4i")
@@ -14,51 +16,67 @@ planet_id = 1
 planet_name = "MERCURY"
 radius_au = 0.4
 angle_deg = 140.0
+human_count = 1
 
 [node name="Venus" parent="." instance=ExtResource("3_5lone")]
 planet_id = 2
 planet_name = "VENUS"
 radius_au = 0.7
 angle_deg = 260.0
+human_count = 1
 
 [node name="Earth" parent="." instance=ExtResource("3_5lone")]
 planet_id = 3
 planet_name = "EARTH"
 radius_au = 1.0
-angle_deg = 90.0
+angle_deg = 70.0
+human_count = 10
 
 [node name="Mars" parent="." instance=ExtResource("3_5lone")]
 planet_id = 4
 planet_name = "MARS"
 radius_au = 1.5
-angle_deg = 10.0
+angle_deg = 20.0
+human_count = 1
 
 [node name="Jupiter" parent="." instance=ExtResource("3_5lone")]
 planet_id = 5
 planet_name = "JUPITER"
 radius_au = 5.2
-angle_deg = 190.0
+angle_deg = 180.0
+human_count = 1
 
 [node name="Saturn" parent="." instance=ExtResource("3_5lone")]
 planet_id = 6
 planet_name = "SATURN"
 radius_au = 9.6
-angle_deg = 350.0
+angle_deg = 360.0
+human_count = 1
 
 [node name="Uranus" parent="." instance=ExtResource("3_5lone")]
 planet_id = 7
 planet_name = "URANUS"
 radius_au = 19.2
 angle_deg = 230.0
+human_count = 1
 
 [node name="Neptune" parent="." instance=ExtResource("3_5lone")]
 planet_id = 8
 planet_name = "NEPTUNE"
 radius_au = 30.0
 angle_deg = 315.0
+human_count = 1
 
 [node name="Pluto" parent="." instance=ExtResource("3_5lone")]
 planet_id = 9
 planet_name = "PLUTO"
 radius_au = 39.5
 angle_deg = 270.0
+planet_progress = 100.0
+alien_count = 10
+
+[node name="GhostLine" type="Line2D" parent="."]
+width = 30.0
+width_curve = ExtResource("4_sjaf3")
+texture = ExtResource("4_teypr")
+texture_mode = 1

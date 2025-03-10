@@ -1,8 +1,8 @@
 [gd_scene load_steps=10 format=3 uid="uid://botsf6hk2rwvk"]
 
 [ext_resource type="Script" uid="uid://bsmbvs0bitu8x" path="res://scripts/planet.gd" id="1_48b8c"]
-[ext_resource type="Texture2D" uid="uid://b8heegno461cs" path="res://assets/icon_planet.png" id="1_cktii"]
 [ext_resource type="Texture2D" uid="uid://bks3gr88ry12m" path="res://assets/progress_bar_top.png" id="2_0k1rn"]
+[ext_resource type="Texture2D" uid="uid://dy58pr3xxsua5" path="res://textures/icon_planet.tres" id="2_48b8c"]
 [ext_resource type="Texture2D" uid="uid://skaaug57n8r0" path="res://assets/icon_alien.png" id="3_48b8c"]
 [ext_resource type="Texture2D" uid="uid://5cesh3x4lxw6" path="res://assets/icon_human.png" id="4_3s4jt"]
 
@@ -31,9 +31,10 @@ offset_left = -128.0
 offset_top = -128.0
 offset_right = 128.0
 offset_bottom = 128.0
+toggle_mode = true
 
 [node name="PlanetIcon" type="Sprite2D" parent="."]
-texture = ExtResource("1_cktii")
+texture = ExtResource("2_48b8c")
 
 [node name="PlanetLabel" type="Label" parent="."]
 anchors_preset = 4
@@ -57,27 +58,32 @@ texture_over = ExtResource("2_0k1rn")
 texture_progress = SubResource("GradientTexture2D_0k1rn")
 
 [node name="AlienIcon" type="Sprite2D" parent="."]
-position = Vector2(-74, 168)
-scale = Vector2(0.5, 0.5)
+position = Vector2(-110, 170)
+scale = Vector2(0.75, 0.75)
 texture = ExtResource("3_48b8c")
 
 [node name="AlienLabel" type="Label" parent="."]
-offset_left = -20.0
-offset_top = 120.0
-offset_right = 21.0
-offset_bottom = 219.0
+offset_left = -27.5
+offset_top = 100.0
+offset_right = 27.5
+offset_bottom = 232.0
 theme_override_font_sizes/font_size = 96
 text = "0"
 
 [node name="HumanIcon" type="Sprite2D" parent="."]
-position = Vector2(-74, -168)
-scale = Vector2(0.5, 0.5)
+position = Vector2(-110, -170)
+scale = Vector2(0.75, 0.75)
 texture = ExtResource("4_3s4jt")
 
 [node name="HumanLabel" type="Label" parent="."]
-offset_left = -20.0
-offset_top = -220.0
-offset_right = 21.0
-offset_bottom = -121.0
-theme_override_font_sizes/font_size = 72
+offset_left = -27.5
+offset_top = -240.0
+offset_right = 27.5
+offset_bottom = -108.0
+theme_override_font_sizes/font_size = 96
 text = "0"
+
+[connection signal="mouse_entered" from="Button" to="." method="_on_button_mouse_entered"]
+[connection signal="mouse_exited" from="Button" to="." method="_on_button_mouse_exited"]
+[connection signal="pressed" from="Button" to="." method="_on_button_pressed"]
+[connection signal="toggled" from="Button" to="." method="_on_button_toggled"]

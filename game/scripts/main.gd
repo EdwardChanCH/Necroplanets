@@ -1,2 +1,2 @@
 class_name Main
-extends Control
+extends Node2D
