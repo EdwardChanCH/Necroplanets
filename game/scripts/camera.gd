@@ -3,27 +3,42 @@ extends Camera2D
 
 @export var camera_zoom: float = 0.2
 @export var camera_zoom_target: float = camera_zoom
-@export var camera_zoom_min: float = 0.1
+@export var camera_zoom_min: float = 0.025
 @export var camera_zoom_max: float = 1
 @export var camera_zoom_step: float = 0.05
-@export var camera_zoom_smooth: float = 0.005
+@export var camera_zoom_smooth: float = camera_zoom_step / 10
+
+@export var camera_fov: float = 5
+@export var camera_fov_target: float = camera_fov
+@export var camera_fov_min: float = 1
+@export var camera_fov_max: float = 40
+@export var camera_fov_step: float = 1
+@export var camera_fov_smooth: float = camera_fov_step / 5
 
 var is_camera_dragging: bool = false
 var old_mouse_pos: Vector2 = Vector2(0 ,0)
 
 func _ready() -> void:
-	set_zoom(Vector2(camera_zoom, camera_zoom))
+	update_camera_zoom()
 
 func _input(event: InputEvent) -> void:
 	if event.is_action_pressed("camera_zoom_in"):
 		camera_zoom_target += camera_zoom_step
 		if (camera_zoom_target > camera_zoom_max):
 			camera_zoom_target = camera_zoom_max
+		
+		camera_fov_target -= camera_fov_step
+		if (camera_fov_target < camera_fov_min):
+			camera_fov_target = camera_fov_min
 	
 	if event.is_action_pressed("camera_zoom_out"):
 		camera_zoom_target -= camera_zoom_step
 		if (camera_zoom_target < camera_zoom_min):
 			camera_zoom_target = camera_zoom_min
+		
+		camera_fov_target += camera_fov_step
+		if (camera_fov_target > camera_fov_max):
+			camera_fov_target = camera_fov_max
 	
 	if event.is_action_pressed("camera_drag"):
 		Input.set_default_cursor_shape(Input.CURSOR_DRAG)
@@ -41,17 +56,45 @@ func _process(_delta: float) -> void:
 		camera_zoom += camera_zoom_smooth
 		if (camera_zoom > camera_zoom_target):
 			camera_zoom = camera_zoom_target
-		set_zoom(Vector2(camera_zoom, camera_zoom))
+		update_camera_zoom()
 			
 	if (camera_zoom > camera_zoom_target):
 		camera_zoom -= camera_zoom_smooth
 		if (camera_zoom < camera_zoom_target):
 			camera_zoom = camera_zoom_target
-		set_zoom(Vector2(camera_zoom, camera_zoom))
+		update_camera_zoom()
+	
+	if (camera_fov < camera_fov_target):
+		camera_fov += camera_fov_smooth
+		if (camera_fov > camera_fov_target):
+			camera_fov = camera_fov_target
+		update_camera_zoom()
+			
+	if (camera_fov > camera_fov_target):
+		camera_fov -= camera_fov_smooth
+		if (camera_fov < camera_fov_target):
+			camera_fov = camera_fov_target
+		update_camera_zoom()
 	
 	if (is_camera_dragging):
 		var new_mouse_pos: Vector2 = get_viewport().get_mouse_position()
-		set_position(get_position() + (old_mouse_pos - new_mouse_pos) * 1/camera_zoom)
+		if (Global.use_zoom_not_fov):
+			set_position(get_position() + (old_mouse_pos - new_mouse_pos) * 1/camera_zoom)
+		else:
+			set_position(get_position() + (old_mouse_pos - new_mouse_pos) * camera_fov)
 		old_mouse_pos = new_mouse_pos
 	
 	pass
+
+func update_camera_zoom() -> void:
+	if (Global.use_zoom_not_fov):
+		set_zoom(Vector2(camera_zoom, camera_zoom))
+	else:
+		set_zoom(Vector2(1/camera_fov, 1/camera_fov))
+	pass
+
+func correct_mouse_pos(mouse_pos: Vector2) -> Vector2:
+	if (Global.use_zoom_not_fov):
+		return (mouse_pos - Vector2(960, 540)) * 1/camera_zoom + self.position
+	else:
+		return (mouse_pos - Vector2(960, 540)) * camera_fov + self.position

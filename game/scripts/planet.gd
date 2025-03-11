@@ -35,7 +35,7 @@ const selected_color: Color = Color(0, 0.75, 0, 1)
 @export var fractured: bool = false
 
 var status: STATUS = STATUS.EMPTY
-var neighbours: Dictionary[Planet, Route2D] = {}
+var neighbours: Dictionary[int, Route2D] = {}
 var alien_incoming: int = 0
 var human_incoming: int = 0
 
@@ -65,6 +65,9 @@ func set_planet_name(planet: String) -> void:
 	pass
 
 func set_planet_position(radius: float, angle: float, relative: bool = false) -> void:
+	var r: float
+	var rad: float
+	
 	if (relative):
 		radius_au += radius
 		angle_deg += angle
@@ -72,8 +75,11 @@ func set_planet_position(radius: float, angle: float, relative: bool = false) ->
 		radius_au = radius
 		angle_deg = angle
 	
-	var r: float = (logx(radius_au, 10) + 1) * AU
-	var rad: float = angle_deg / 360 * 2 * PI
+	if (Global.use_log_scale_map):
+		r = (logx(radius_au, 10) + 1) * AU
+	else:
+		r = radius_au * AU
+	rad = deg_to_rad(angle_deg)
 	
 	self.set_position(Vector2(r * cos(rad), -r * sin(rad)))
 	pass
@@ -138,6 +144,10 @@ func update_status() -> void:
 
 func set_button(toggled_on: bool) -> void:
 	$Button.set_pressed_no_signal(toggled_on)
+	if ($Button.is_pressed()):
+		$PlanetIcon.set_modulate(selected_color)
+	else:
+		$PlanetIcon.set_modulate(base_color)
 	pass
 
 func _on_button_toggled(toggled_on: bool) -> void:

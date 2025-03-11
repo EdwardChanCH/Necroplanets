@@ -5,8 +5,10 @@
 
 [sub_resource type="Curve2D" id="Curve2D_bdg0w"]
 
-[node name="Route2D" type="Node2D"]
+[node name="Route2D" type="Node2D" node_paths=PackedStringArray("path", "line")]
 script = ExtResource("1_bdg0w")
+path = NodePath("Path")
+line = NodePath("Line")
 
 [node name="Path" type="Path2D" parent="."]
 curve = SubResource("Curve2D_bdg0w")

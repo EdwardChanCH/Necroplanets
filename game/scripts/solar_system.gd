@@ -2,8 +2,9 @@ class_name SolarSystem
 extends Node2D
 
 const route_2d_res: PackedScene = preload("res://scenes/route_2d.tscn")
+const convoy_2d_res: PackedScene = preload("res://scenes/convoy_2d.tscn")
 
-@export var camera: Camera2D
+@export var camera: Camera
 
 var planets: Array[Planet] = []
 var routes: Dictionary[int, Route2D] = {}
@@ -40,18 +41,23 @@ func _ready() -> void:
 	add_route($Uranus, $Pluto)
 	add_route($Neptune, $Pluto)
 	
-	show_ghost_line($Pluto.position, $Neptune.position)
+	### TESTING AREA ###
+	var convoy: Convoy2D = convoy_2d_res.instantiate()
+	convoy.has_takenoff.connect(_on_convoy_has_takenoff)
+	convoy.has_terminated.connect(_on_convoy_has_terminated)
+	convoy.set_convoy(routes[79], true, 10, true, 1)
+	convoy.takeoff()
+	
+	show_ghost_line(planets[4].position, planets[3].position)
+	
 	pass
 
-func _process(delta: float) -> void:
+func _process(_delta: float) -> void:
 	if (selected_planets.size() == 1):
-		var mouse_pos = get_viewport().get_mouse_position()
-		var camera_pos = camera.position
-		var camera_zoom = camera.camera_zoom
-		var local_pos = (mouse_pos - Vector2(960, 540)) * 1/camera_zoom + camera_pos 
-		show_ghost_line(planets[selected_planets[0]].position, local_pos)
-		print(camera_pos)
-		
+		show_ghost_line(
+			planets[selected_planets[0]].position, 
+			camera.correct_mouse_pos(get_viewport().get_mouse_position())
+			)
 		
 	pass
 
@@ -67,8 +73,8 @@ func add_route(planet1: Planet, planet2: Planet) -> void:
 	route.set_route(planet1, planet2)
 	
 	routes[routeID] = route
-	planet1.neighbours[planet2] = route
-	planet2.neighbours[planet1] = route
+	planet1.neighbours[planet2.planet_id] = route
+	planet2.neighbours[planet1.planet_id] = route
 	pass
 
 func show_ghost_line(start: Vector2, end: Vector2) -> void:
@@ -83,17 +89,34 @@ func hide_ghost_line() -> void:
 	$GhostLine.set_visible(false)
 	pass
 
-func show_convoy_ui(from: int, to: int) -> void:
+func deselect_all() -> void:
+	for id in selected_planets:
+		planets[id].set_button(false)
+	selected_planets.clear()
+	hide_ghost_line()
 	pass
 
-func _on_planet_selected(planet_id: int) -> void:
-	selected_planets.push_back(planet_id)
+func show_convoy_ui(_start: int, _end: int) -> void:
+	pass
+
+func _on_planet_selected(_id: int) -> void:
 	if (selected_planets.size() >= 2):
+		deselect_all()
+	
+	selected_planets.push_back(_id)
+	
+	if (selected_planets.size() == 2):
 		show_ghost_line(planets[selected_planets[0]].position, planets[selected_planets[1]].position)
 		show_convoy_ui(selected_planets[0], selected_planets[1])
 	pass
 
-func _on_planet_deselected(planet_id: int) -> void:
-	selected_planets.erase(planet_id)
-	hide_ghost_line()
+func _on_planet_deselected(_id: int) -> void:
+	deselect_all()
+	pass
+
+func _on_convoy_has_takenoff() -> void:
+	deselect_all()
+	pass
+
+func _on_convoy_has_terminated() -> void:
 	pass
