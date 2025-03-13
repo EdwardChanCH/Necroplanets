@@ -5,14 +5,15 @@ const route_2d_res: PackedScene = preload("res://scenes/route_2d.tscn")
 const convoy_2d_res: PackedScene = preload("res://scenes/convoy_2d.tscn")
 
 @export var camera: Camera
+@export var convoyUI: ConvoyUI
 
 var planets: Array[Planet] = []
 var routes: Dictionary[int, Route2D] = {}
 var ghost_routes: Array[Route2D] = []
-var selected_planets: Array[int] = []
+var selected_ids: Array[int] = []
 
 func _ready() -> void:
-	planets.push_back(null)
+	planets.push_back(Planet.new())
 	planets.push_back($Mercury)
 	planets.push_back($Venus)
 	planets.push_back($Earth)
@@ -23,9 +24,9 @@ func _ready() -> void:
 	planets.push_back($Neptune)
 	planets.push_back($Pluto)
 	
-	for i in range(1, 10):
-		planets[i].planet_selected.connect(_on_planet_selected)
-		planets[i].planet_deselected.connect(_on_planet_deselected)
+	for p: Planet in planets:
+		p.planet_selected.connect(_on_planet_selected)
+		p.planet_deselected.connect(_on_planet_deselected)
 		pass
 	
 	add_route($Earth, $Mercury)
@@ -42,20 +43,15 @@ func _ready() -> void:
 	add_route($Neptune, $Pluto)
 	
 	### TESTING AREA ###
-	var convoy: Convoy2D = convoy_2d_res.instantiate()
-	convoy.has_takenoff.connect(_on_convoy_has_takenoff)
-	convoy.has_terminated.connect(_on_convoy_has_terminated)
-	convoy.set_convoy(routes[79], true, 10, true, 1)
-	convoy.takeoff()
-	
-	show_ghost_line(planets[4].position, planets[3].position)
+	transfer_ships(planets[2], planets[7], 1, false, Global.human_accel)
+	transfer_ships(planets[2], planets[8], 1, false, Global.human_accel)
 	
 	pass
 
 func _process(_delta: float) -> void:
-	if (selected_planets.size() == 1):
-		show_ghost_line(
-			planets[selected_planets[0]].position, 
+	if (selected_ids.size() == 1):
+		redraw_ghost_line(
+			planets[selected_ids[0]].position, 
 			camera.correct_mouse_pos(get_viewport().get_mouse_position())
 			)
 		
@@ -77,7 +73,7 @@ func add_route(planet1: Planet, planet2: Planet) -> void:
 	planet2.neighbours[planet1.planet_id] = route
 	pass
 
-func show_ghost_line(start: Vector2, end: Vector2) -> void:
+func redraw_ghost_line(start: Vector2, end: Vector2) -> void:
 	$GhostLine.set_visible(true)
 	$GhostLine.clear_points()
 	$GhostLine.clear_points()
@@ -90,24 +86,51 @@ func hide_ghost_line() -> void:
 	pass
 
 func deselect_all() -> void:
-	for id in selected_planets:
+	for id in selected_ids:
 		planets[id].set_button(false)
-	selected_planets.clear()
+	selected_ids.clear()
 	hide_ghost_line()
 	pass
 
-func show_convoy_ui(_start: int, _end: int) -> void:
+func redraw_map() -> void:
+	for p in planets:
+		p.redraw_planet_position()
+	
+	for r in routes.values():
+		r.redraw_route()
+	
+	if (selected_ids.size() == 2):
+		redraw_ghost_line(planets[selected_ids[0]].position, planets[selected_ids[1]].position)
+	pass
+
+func transfer_ships(source: Planet, destination: Planet, amount: int, is_alien: bool, accel: float):
+	var convoy: Convoy2D = convoy_2d_res.instantiate()
+	var route_id: int = source.planet_id * 10 + destination.planet_id
+	var is_forward: bool = routes.has(route_id)
+	if (!is_forward):
+		route_id = destination.planet_id * 10 + source.planet_id
+	
+	convoy.has_takenoff.connect(_on_convoy_has_takenoff)
+	convoy.has_terminated.connect(_on_convoy_has_terminated)
+	convoy.set_convoy(routes[route_id], is_forward, amount, is_alien, accel)
+	convoy.takeoff()
 	pass
 
 func _on_planet_selected(_id: int) -> void:
-	if (selected_planets.size() >= 2):
+	if (selected_ids.size() == 0):
+		selected_ids.push_back(_id)
+	elif (selected_ids.size() == 1):
+		if (planets[selected_ids[0]].neighbours.has(_id)):
+			selected_ids.push_back(_id)
+		else:
+			planets[_id].set_button(false)
+	elif (selected_ids.size() >= 2):
 		deselect_all()
+		selected_ids.push_back(_id)
 	
-	selected_planets.push_back(_id)
-	
-	if (selected_planets.size() == 2):
-		show_ghost_line(planets[selected_planets[0]].position, planets[selected_planets[1]].position)
-		show_convoy_ui(selected_planets[0], selected_planets[1])
+	if (selected_ids.size() == 2):
+		redraw_ghost_line(planets[selected_ids[0]].position, planets[selected_ids[1]].position)
+		convoyUI.show_ui(planets[selected_ids[0]], planets[selected_ids[1]])
 	pass
 
 func _on_planet_deselected(_id: int) -> void:
@@ -119,4 +142,6 @@ func _on_convoy_has_takenoff() -> void:
 	pass
 
 func _on_convoy_has_terminated() -> void:
+	redraw_map()
+	convoyUI.update_ship_count()
 	pass

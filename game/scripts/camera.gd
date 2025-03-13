@@ -21,7 +21,7 @@ var old_mouse_pos: Vector2 = Vector2(0 ,0)
 func _ready() -> void:
 	update_camera_zoom()
 
-func _input(event: InputEvent) -> void:
+func _unhandled_input(event: InputEvent) -> void:
 	if event.is_action_pressed("camera_zoom_in"):
 		camera_zoom_target += camera_zoom_step
 		if (camera_zoom_target > camera_zoom_max):
@@ -41,12 +41,12 @@ func _input(event: InputEvent) -> void:
 			camera_fov_target = camera_fov_max
 	
 	if event.is_action_pressed("camera_drag"):
-		Input.set_default_cursor_shape(Input.CURSOR_DRAG)
+		Global.change_cursor_shape(Input.CURSOR_DRAG)
 		is_camera_dragging = true
 		old_mouse_pos = get_viewport().get_mouse_position()
 	
 	if event.is_action_released("camera_drag"):
-		Input.set_default_cursor_shape(Input.CURSOR_ARROW)
+		Global.change_cursor_shape(Input.CURSOR_ARROW)
 		is_camera_dragging = false
 	
 	pass
@@ -98,3 +98,7 @@ func correct_mouse_pos(mouse_pos: Vector2) -> Vector2:
 		return (mouse_pos - Vector2(960, 540)) * 1/camera_zoom + self.position
 	else:
 		return (mouse_pos - Vector2(960, 540)) * camera_fov + self.position
+
+func center_camera() -> void:
+	set_position(Vector2(0, 0))
+	pass

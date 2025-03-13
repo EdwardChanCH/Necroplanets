@@ -10,8 +10,8 @@ const line_ghost_alien_curve: Curve = preload("res://textures/line_ghost_alien_c
 
 var planetA: Planet
 var planetB: Planet
-var routeID: int = 0
 var length: float = 0
+var is_hinted: bool = false
 
 func cosine_law(pA: Planet, pB: Planet) -> float:
 	var a: float = pA.radius_au
@@ -23,11 +23,36 @@ func cosine_law(pA: Planet, pB: Planet) -> float:
 func set_route(start: Planet, end: Planet) -> void:
 	planetA = start
 	planetB = end
+	length = cosine_law(start, end)
 	
 	path.set_curve(Curve2D.new()) # Curve2D in a scene are shared by default
 	path.get_curve().add_point(planetA.get_position())
 	path.get_curve().add_point(planetB.get_position())
 	line.set_points(path.curve.get_baked_points())
 	
-	length = cosine_law(start, end)
+	recolor_route()
+	pass
+
+func redraw_route() -> void:
+	set_route(planetA, planetB)
+	pass
+
+func recolor_route() -> void:
+	if (is_hinted):
+		line.set_default_color(Color(0, 0, 1, 1))
+	else:
+		var diff_A: float = planetA.alien_count - planetA.human_count
+		var diff_B: float = planetB.alien_count - planetB.human_count
+		
+		if (diff_A >= 0 and diff_B >= 0):
+			line.set_default_color(Color(0, 1, 0, 1))
+		elif (diff_A < 0 and diff_B < 0):
+			line.set_default_color(Color(1, 0, 0, 1))
+		else:
+			line.set_default_color(Color(0, 1, 1, 1))
+	pass
+
+func hint_route(_is_hinted: bool) -> void:
+	is_hinted = _is_hinted
+	recolor_route()
 	pass

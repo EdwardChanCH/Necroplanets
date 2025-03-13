@@ -23,7 +23,7 @@ planet_id = 2
 planet_name = "VENUS"
 radius_au = 0.7
 angle_deg = 260.0
-human_count = 1
+human_count = 3
 
 [node name="Earth" parent="." instance=ExtResource("3_5lone")]
 planet_id = 3
@@ -58,14 +58,12 @@ planet_id = 7
 planet_name = "URANUS"
 radius_au = 19.2
 angle_deg = 230.0
-human_count = 1
 
 [node name="Neptune" parent="." instance=ExtResource("3_5lone")]
 planet_id = 8
 planet_name = "NEPTUNE"
 radius_au = 30.0
 angle_deg = 315.0
-human_count = 1
 
 [node name="Pluto" parent="." instance=ExtResource("3_5lone")]
 planet_id = 9

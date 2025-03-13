@@ -34,10 +34,10 @@ func _process(delta: float) -> void:
 	if (completion < 0 or completion > 1):
 		if (is_alien):
 			end.set_alien_count(ship_count, true)
-			end.alien_incoming -= ship_count
+			end.set_alien_incoming(-ship_count, true)
 		else:
 			end.set_human_count(ship_count, true)
-			end.human_incoming -= ship_count
+			end.set_human_incoming(-ship_count, true)
 		terminate()
 	else:
 		set_progress_ratio(completion)

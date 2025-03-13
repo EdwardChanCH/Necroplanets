@@ -1,6 +1,9 @@
 # Created by https://www.toptal.com/developers/gitignore/api/windows,macos,linux,godot,visualstudio,visualstudiocode
 # Edit at https://www.toptal.com/developers/gitignore?templates=windows,macos,linux,godot,visualstudio,visualstudiocode
 
+### Custom ###
+export/
+
 ### Godot ###
 # Godot 4+ specific ignores
 .godot/

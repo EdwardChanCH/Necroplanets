@@ -84,6 +84,10 @@ func set_planet_position(radius: float, angle: float, relative: bool = false) ->
 	self.set_position(Vector2(r * cos(rad), -r * sin(rad)))
 	pass
 
+func redraw_planet_position() -> void:
+	set_planet_position(0, 0, true)
+	pass
+
 func set_planet_progress(amount: float, relative: bool = false) -> void:
 	if (relative):
 		planet_progress += amount
@@ -121,6 +125,20 @@ func set_human_count(amount: int, relative: bool = false) -> void:
 	$HumanLabel.set_text(str(human_count))
 	pass
 
+func set_alien_incoming(amount: int, relative: bool = false) -> void:
+	if (relative):
+		alien_incoming += amount
+	else:
+		alien_incoming = amount
+	pass
+
+func set_human_incoming(amount: int, relative: bool = false) -> void:
+	if (relative):
+		human_incoming += amount
+	else:
+		human_incoming = amount
+	pass
+
 func update_status() -> void:
 	if (alien_count == 0 and human_count == 0 and !fractured):
 		status = STATUS.EMPTY
@@ -152,9 +170,9 @@ func set_button(toggled_on: bool) -> void:
 
 func _on_button_toggled(toggled_on: bool) -> void:
 	if (toggled_on):
-		emit_signal("planet_selected", planet_id)
+		planet_selected.emit(planet_id)
 	else:
-		emit_signal("planet_deselected", planet_id)
+		planet_deselected.emit(planet_id)
 	pass
 
 func _on_button_mouse_entered() -> void:
