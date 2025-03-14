@@ -1,4 +1,4 @@
-[gd_scene load_steps=19 format=3 uid="uid://dr06sl28j0mq"]
+[gd_scene load_steps=18 format=3 uid="uid://dr06sl28j0mq"]
 
 [ext_resource type="Script" uid="uid://j86twos6ww6k" path="res://scripts/camera.gd" id="1_0wfyh"]
 [ext_resource type="PackedScene" uid="uid://bbwps7161hhpl" path="res://scenes/solar_system.tscn" id="1_o5qli"]
@@ -6,9 +6,8 @@
 [ext_resource type="Script" uid="uid://dxvc642f57rd7" path="res://scenes/audio_manager.gd" id="2_jbj1t"]
 [ext_resource type="Texture2D" uid="uid://beycwql0rrpkh" path="res://assets/background_stars_1.png" id="2_jyhfs"]
 [ext_resource type="Script" uid="uid://dd8xhfvuccvtl" path="res://scenes/side_bar.gd" id="2_tefeu"]
-[ext_resource type="AudioStream" uid="uid://rj77cddjla8e" path="res://assets/bgm_intro.wav" id="3_muem4"]
+[ext_resource type="AudioStream" uid="uid://cgu7m3rsdjmgx" path="res://assets/bgm_intro_and_loop.wav" id="3_jkv2x"]
 [ext_resource type="Texture2D" uid="uid://dtgfoyyvt61qa" path="res://assets/background_stars_2.png" id="3_tbgi4"]
-[ext_resource type="AudioStream" uid="uid://ce7ryu6tmbjqt" path="res://assets/bgm_loop.wav" id="4_dp3eg"]
 [ext_resource type="Script" uid="uid://d1c8y4j2u0we0" path="res://scripts/convoy_ui.gd" id="7_o6xl0"]
 [ext_resource type="Texture2D" uid="uid://dfi4mmt542lcg" path="res://assets/icon_menubar.png" id="7_trceg"]
 [ext_resource type="Texture2D" uid="uid://dfoguboowcmvj" path="res://assets/icon_settings.png" id="8_a8y0u"]
@@ -29,18 +28,16 @@ height = 1080
 [node name="Main" type="Node2D"]
 script = ExtResource("1_sugp2")
 
-[node name="AudioManager" type="Node" parent="." node_paths=PackedStringArray("bgm_intro", "bgm_loop", "sfx_explode", "sfx_select")]
+[node name="AudioManager" type="Node" parent="." node_paths=PackedStringArray("bgm_intro_loop", "sfx_explode", "sfx_select")]
 script = ExtResource("2_jbj1t")
-bgm_intro = NodePath("bgmIntro")
-bgm_loop = NodePath("bgmLoop")
+bgm_intro_loop = NodePath("bgmIntroLoop")
 sfx_explode = NodePath("sfxExplode")
 sfx_select = NodePath("sfxselect")
 
-[node name="bgmIntro" type="AudioStreamPlayer" parent="AudioManager"]
-stream = ExtResource("3_muem4")
-
-[node name="bgmLoop" type="AudioStreamPlayer" parent="AudioManager"]
-stream = ExtResource("4_dp3eg")
+[node name="bgmIntroLoop" type="AudioStreamPlayer" parent="AudioManager"]
+stream = ExtResource("3_jkv2x")
+volume_db = -7.0
+autoplay = true
 
 [node name="sfxExplode" type="AudioStreamPlayer" parent="AudioManager"]
 max_polyphony = 9
@@ -183,7 +180,6 @@ size_flags_horizontal = 3
 mouse_filter = 2
 
 [node name="MenuBox" type="VBoxContainer" parent="CanvasUI/MainUI/SBoxMenu/VBoxMenu/HBoxMenu/SidePanel"]
-visible = false
 layout_mode = 2
 mouse_filter = 2
 
@@ -224,6 +220,7 @@ theme_override_font_sizes/font_size = 24
 text = "Start Game"
 
 [node name="OptionsBox" type="VBoxContainer" parent="CanvasUI/MainUI/SBoxMenu/VBoxMenu/HBoxMenu/SidePanel"]
+visible = false
 layout_mode = 2
 mouse_filter = 2
 
@@ -526,8 +523,7 @@ size_flags_horizontal = 3
 theme_override_font_sizes/font_size = 24
 text = "Cancel"
 
-[connection signal="finished" from="AudioManager/bgmIntro" to="AudioManager" method="_on_bgm_intro_finished"]
-[connection signal="finished" from="AudioManager/bgmLoop" to="AudioManager" method="_on_bgm_loop_finished"]
+[connection signal="finished" from="AudioManager/bgmIntroLoop" to="AudioManager" method="_on_bgm_intro_finished"]
 [connection signal="pressed" from="CanvasUI/MainUI/SBoxMenu/VBoxMenu/HBoxMenu/MBox1/VBoxButton/MenuButton" to="CanvasUI/MainUI/SBoxMenu/VBoxMenu/HBoxMenu" method="_on_menu_button_pressed"]
 [connection signal="pressed" from="CanvasUI/MainUI/SBoxMenu/VBoxMenu/HBoxMenu/MBox1/VBoxButton/SettingsButton" to="CanvasUI/MainUI/SBoxMenu/VBoxMenu/HBoxMenu" method="_on_settings_button_pressed"]
 [connection signal="pressed" from="CanvasUI/MainUI/SBoxMenu/VBoxMenu/HBoxMenu/MBox1/VBoxButton/NewsButton" to="CanvasUI/MainUI/SBoxMenu/VBoxMenu/HBoxMenu" method="_on_news_button_pressed"]

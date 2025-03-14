@@ -1,8 +1,7 @@
 class_name AudioManager
 extends Node
 
-@export var bgm_intro: AudioStreamPlayer
-@export var bgm_loop: AudioStreamPlayer
+@export var bgm_intro_loop: AudioStreamPlayer
 @export var sfx_explode: AudioStreamPlayer
 @export var sfx_select: AudioStreamPlayer
 
@@ -10,15 +9,13 @@ var bgm: Array[AudioStreamPlayer] = []
 var sfx: Array[AudioStreamPlayer] = []
 
 func _ready() -> void:
-	bgm.push_back($bgmIntro)
-	bgm.push_back($bgmLoop)
+	bgm.push_back(bgm_intro_loop)
 	
-	sfx.push_back($sfxExplode)
-	sfx.push_back($sfxselect)
+	sfx.push_back(sfx_explode)
+	sfx.push_back(sfx_select)
 	
 	change_bgm_volume()
 	change_sfx_volume()
-	bgm_intro.play()
 	pass
 
 func change_bgm_volume() -> void:
@@ -37,12 +34,4 @@ func change_sfx_volume() -> void:
 			a.set_stream_paused(true)
 		else:
 			a.set_stream_paused(false)
-	pass
-
-func _on_bgm_intro_finished() -> void:
-	bgm_loop.play()
-	pass
-
-func _on_bgm_loop_finished() -> void:
-	bgm_loop.play()
 	pass

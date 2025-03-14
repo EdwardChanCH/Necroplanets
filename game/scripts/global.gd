@@ -6,6 +6,8 @@ signal changed_fov_not_zoom
 signal changed_cursor_shape
 signal changed_bgm_volume
 signal changed_sfx_volume
+signal changed_game_clock_period
+signal pulsed_game_clock
 
 var use_cheat: bool = false
 var use_log_scale_map: bool = true
@@ -13,9 +15,18 @@ var use_fov_not_zoom: bool = true
 var bgm_value: float = 0.5
 var sfx_value: float = 0.5
 var cursor_shape: Input.CursorShape = Input.CURSOR_ARROW
+var game_clock_period: float = 0.5
+var game_clock_sum: float = 0
 
 var alien_accel: float = 1
 var human_accel: float = 1
+
+func _process(delta: float) -> void:
+	game_clock_sum += delta
+	if (game_clock_sum > game_clock_period):
+		game_clock_sum = fmod(game_clock_sum, game_clock_period)
+		pulsed_game_clock.emit()
+	pass
 
 func change_cheat(value: bool) -> void:
 	use_cheat = value
@@ -46,4 +57,9 @@ func change_bgm_value(value: float) -> void:
 func change_sfx_value(value: float) -> void:
 	sfx_value = value
 	changed_sfx_volume.emit()
+	pass
+
+func change_game_clock_period(value: float) -> void:
+	game_clock_period = value
+	changed_game_clock_period.emit()
 	pass
