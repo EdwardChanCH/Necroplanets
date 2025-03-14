@@ -1,11 +1,14 @@
-[gd_scene load_steps=16 format=3 uid="uid://dr06sl28j0mq"]
+[gd_scene load_steps=19 format=3 uid="uid://dr06sl28j0mq"]
 
 [ext_resource type="Script" uid="uid://j86twos6ww6k" path="res://scripts/camera.gd" id="1_0wfyh"]
 [ext_resource type="PackedScene" uid="uid://bbwps7161hhpl" path="res://scenes/solar_system.tscn" id="1_o5qli"]
 [ext_resource type="Script" uid="uid://b7yysevnkwwfv" path="res://scripts/main.gd" id="1_sugp2"]
+[ext_resource type="Script" uid="uid://dxvc642f57rd7" path="res://scenes/audio_manager.gd" id="2_jbj1t"]
 [ext_resource type="Texture2D" uid="uid://beycwql0rrpkh" path="res://assets/background_stars_1.png" id="2_jyhfs"]
 [ext_resource type="Script" uid="uid://dd8xhfvuccvtl" path="res://scenes/side_bar.gd" id="2_tefeu"]
+[ext_resource type="AudioStream" uid="uid://rj77cddjla8e" path="res://assets/bgm_intro.wav" id="3_muem4"]
 [ext_resource type="Texture2D" uid="uid://dtgfoyyvt61qa" path="res://assets/background_stars_2.png" id="3_tbgi4"]
+[ext_resource type="AudioStream" uid="uid://ce7ryu6tmbjqt" path="res://assets/bgm_loop.wav" id="4_dp3eg"]
 [ext_resource type="Script" uid="uid://d1c8y4j2u0we0" path="res://scripts/convoy_ui.gd" id="7_o6xl0"]
 [ext_resource type="Texture2D" uid="uid://dfi4mmt542lcg" path="res://assets/icon_menubar.png" id="7_trceg"]
 [ext_resource type="Texture2D" uid="uid://dfoguboowcmvj" path="res://assets/icon_settings.png" id="8_a8y0u"]
@@ -25,6 +28,24 @@ height = 1080
 
 [node name="Main" type="Node2D"]
 script = ExtResource("1_sugp2")
+
+[node name="AudioManager" type="Node" parent="." node_paths=PackedStringArray("bgm_intro", "bgm_loop", "sfx_explode", "sfx_select")]
+script = ExtResource("2_jbj1t")
+bgm_intro = NodePath("bgmIntro")
+bgm_loop = NodePath("bgmLoop")
+sfx_explode = NodePath("sfxExplode")
+sfx_select = NodePath("sfxselect")
+
+[node name="bgmIntro" type="AudioStreamPlayer" parent="AudioManager"]
+stream = ExtResource("3_muem4")
+
+[node name="bgmLoop" type="AudioStreamPlayer" parent="AudioManager"]
+stream = ExtResource("4_dp3eg")
+
+[node name="sfxExplode" type="AudioStreamPlayer" parent="AudioManager"]
+max_polyphony = 9
+
+[node name="sfxselect" type="AudioStreamPlayer" parent="AudioManager"]
 
 [node name="ParallaxBackground" type="ParallaxBackground" parent="."]
 scale = Vector2(2, 2)
@@ -162,6 +183,7 @@ size_flags_horizontal = 3
 mouse_filter = 2
 
 [node name="MenuBox" type="VBoxContainer" parent="CanvasUI/MainUI/SBoxMenu/VBoxMenu/HBoxMenu/SidePanel"]
+visible = false
 layout_mode = 2
 mouse_filter = 2
 
@@ -202,7 +224,6 @@ theme_override_font_sizes/font_size = 24
 text = "Start Game"
 
 [node name="OptionsBox" type="VBoxContainer" parent="CanvasUI/MainUI/SBoxMenu/VBoxMenu/HBoxMenu/SidePanel"]
-visible = false
 layout_mode = 2
 mouse_filter = 2
 
@@ -222,7 +243,16 @@ horizontal_alignment = 1
 vertical_alignment = 1
 autowrap_mode = 3
 
-[node name="UseCheatCheckBox2" type="CheckButton" parent="CanvasUI/MainUI/SBoxMenu/VBoxMenu/HBoxMenu/SidePanel/OptionsBox"]
+[node name="CenterCameraButton" type="Button" parent="CanvasUI/MainUI/SBoxMenu/VBoxMenu/HBoxMenu/SidePanel/OptionsBox"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+text = "Center Camera"
+
+[node name="Spacer1" type="Control" parent="CanvasUI/MainUI/SBoxMenu/VBoxMenu/HBoxMenu/SidePanel/OptionsBox"]
+custom_minimum_size = Vector2(0, 40)
+layout_mode = 2
+
+[node name="UseCheatCheckBox" type="CheckButton" parent="CanvasUI/MainUI/SBoxMenu/VBoxMenu/HBoxMenu/SidePanel/OptionsBox"]
 layout_mode = 2
 theme_override_font_sizes/font_size = 24
 text = "Use Cheats"
@@ -233,16 +263,37 @@ theme_override_font_sizes/font_size = 24
 button_pressed = true
 text = "Use Logarithmic Map Scale"
 
-[node name="FOVZoomCheckBox2" type="CheckButton" parent="CanvasUI/MainUI/SBoxMenu/VBoxMenu/HBoxMenu/SidePanel/OptionsBox"]
+[node name="FOVZoomCheckBox" type="CheckButton" parent="CanvasUI/MainUI/SBoxMenu/VBoxMenu/HBoxMenu/SidePanel/OptionsBox"]
 layout_mode = 2
 theme_override_font_sizes/font_size = 24
 button_pressed = true
 text = "Use FOV For Camera Zoom"
 
-[node name="CenterCameraButton" type="Button" parent="CanvasUI/MainUI/SBoxMenu/VBoxMenu/HBoxMenu/SidePanel/OptionsBox"]
+[node name="BGMVolume" type="Label" parent="CanvasUI/MainUI/SBoxMenu/VBoxMenu/HBoxMenu/SidePanel/OptionsBox"]
 layout_mode = 2
 theme_override_font_sizes/font_size = 24
-text = "Center Camera"
+text = "
+Background Music Volume"
+
+[node name="BGMSlider" type="HSlider" parent="CanvasUI/MainUI/SBoxMenu/VBoxMenu/HBoxMenu/SidePanel/OptionsBox"]
+layout_mode = 2
+max_value = 1.0
+step = 0.01
+tick_count = 5
+ticks_on_borders = true
+
+[node name="SFXVolume" type="Label" parent="CanvasUI/MainUI/SBoxMenu/VBoxMenu/HBoxMenu/SidePanel/OptionsBox"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+text = "
+Sound Effect Volume"
+
+[node name="SFXSlider" type="HSlider" parent="CanvasUI/MainUI/SBoxMenu/VBoxMenu/HBoxMenu/SidePanel/OptionsBox"]
+layout_mode = 2
+max_value = 1.0
+step = 0.01
+tick_count = 5
+ticks_on_borders = true
 
 [node name="NewsBox" type="VBoxContainer" parent="CanvasUI/MainUI/SBoxMenu/VBoxMenu/HBoxMenu/SidePanel"]
 visible = false
@@ -475,6 +526,8 @@ size_flags_horizontal = 3
 theme_override_font_sizes/font_size = 24
 text = "Cancel"
 
+[connection signal="finished" from="AudioManager/bgmIntro" to="AudioManager" method="_on_bgm_intro_finished"]
+[connection signal="finished" from="AudioManager/bgmLoop" to="AudioManager" method="_on_bgm_loop_finished"]
 [connection signal="pressed" from="CanvasUI/MainUI/SBoxMenu/VBoxMenu/HBoxMenu/MBox1/VBoxButton/MenuButton" to="CanvasUI/MainUI/SBoxMenu/VBoxMenu/HBoxMenu" method="_on_menu_button_pressed"]
 [connection signal="pressed" from="CanvasUI/MainUI/SBoxMenu/VBoxMenu/HBoxMenu/MBox1/VBoxButton/SettingsButton" to="CanvasUI/MainUI/SBoxMenu/VBoxMenu/HBoxMenu" method="_on_settings_button_pressed"]
 [connection signal="pressed" from="CanvasUI/MainUI/SBoxMenu/VBoxMenu/HBoxMenu/MBox1/VBoxButton/NewsButton" to="CanvasUI/MainUI/SBoxMenu/VBoxMenu/HBoxMenu" method="_on_news_button_pressed"]
@@ -482,10 +535,12 @@ text = "Cancel"
 [connection signal="pressed" from="CanvasUI/MainUI/SBoxMenu/VBoxMenu/HBoxMenu/MBox1/VBoxButton/CreditsButton" to="CanvasUI/MainUI/SBoxMenu/VBoxMenu/HBoxMenu" method="_on_credits_button_pressed"]
 [connection signal="pressed" from="CanvasUI/MainUI/SBoxMenu/VBoxMenu/HBoxMenu/MBox1/VBoxButton/ExitButton" to="CanvasUI/MainUI/SBoxMenu/VBoxMenu/HBoxMenu" method="_on_exit_button_pressed"]
 [connection signal="pressed" from="CanvasUI/MainUI/SBoxMenu/VBoxMenu/HBoxMenu/SidePanel/MenuBox/StartButton" to="CanvasUI/MainUI/SBoxMenu/VBoxMenu/HBoxMenu" method="_on_start_button_pressed"]
-[connection signal="toggled" from="CanvasUI/MainUI/SBoxMenu/VBoxMenu/HBoxMenu/SidePanel/OptionsBox/UseCheatCheckBox2" to="CanvasUI/MainUI/SBoxMenu/VBoxMenu/HBoxMenu" method="_on_use_cheat_check_box_toggled"]
-[connection signal="toggled" from="CanvasUI/MainUI/SBoxMenu/VBoxMenu/HBoxMenu/SidePanel/OptionsBox/LogScaleCheckBox" to="CanvasUI/MainUI/SBoxMenu/VBoxMenu/HBoxMenu" method="_on_log_scale_check_box_toggled"]
-[connection signal="toggled" from="CanvasUI/MainUI/SBoxMenu/VBoxMenu/HBoxMenu/SidePanel/OptionsBox/FOVZoomCheckBox2" to="CanvasUI/MainUI/SBoxMenu/VBoxMenu/HBoxMenu" method="_on_fov_zoom_check_box_toggled"]
 [connection signal="pressed" from="CanvasUI/MainUI/SBoxMenu/VBoxMenu/HBoxMenu/SidePanel/OptionsBox/CenterCameraButton" to="CanvasUI/MainUI/SBoxMenu/VBoxMenu/HBoxMenu" method="_on_center_camera_button_pressed"]
+[connection signal="toggled" from="CanvasUI/MainUI/SBoxMenu/VBoxMenu/HBoxMenu/SidePanel/OptionsBox/UseCheatCheckBox" to="CanvasUI/MainUI/SBoxMenu/VBoxMenu/HBoxMenu" method="_on_use_cheat_check_box_toggled"]
+[connection signal="toggled" from="CanvasUI/MainUI/SBoxMenu/VBoxMenu/HBoxMenu/SidePanel/OptionsBox/LogScaleCheckBox" to="CanvasUI/MainUI/SBoxMenu/VBoxMenu/HBoxMenu" method="_on_log_scale_check_box_toggled"]
+[connection signal="toggled" from="CanvasUI/MainUI/SBoxMenu/VBoxMenu/HBoxMenu/SidePanel/OptionsBox/FOVZoomCheckBox" to="CanvasUI/MainUI/SBoxMenu/VBoxMenu/HBoxMenu" method="_on_fov_zoom_check_box_toggled"]
+[connection signal="value_changed" from="CanvasUI/MainUI/SBoxMenu/VBoxMenu/HBoxMenu/SidePanel/OptionsBox/BGMSlider" to="CanvasUI/MainUI/SBoxMenu/VBoxMenu/HBoxMenu" method="_on_bgm_slider_value_changed"]
+[connection signal="value_changed" from="CanvasUI/MainUI/SBoxMenu/VBoxMenu/HBoxMenu/SidePanel/OptionsBox/SFXSlider" to="CanvasUI/MainUI/SBoxMenu/VBoxMenu/HBoxMenu" method="_on_sfx_slider_value_changed"]
 [connection signal="pressed" from="CanvasUI/MainUI/SBoxMenu/VBoxMenu/HBoxMenu/SidePanel/ExitBox/ExitNoButton" to="CanvasUI/MainUI/SBoxMenu/VBoxMenu/HBoxMenu" method="_on_exit_no_button_pressed"]
 [connection signal="pressed" from="CanvasUI/MainUI/SBoxMenu/VBoxMenu/HBoxMenu/SidePanel/ExitBox/ExitYesButton" to="CanvasUI/MainUI/SBoxMenu/VBoxMenu/HBoxMenu" method="_on_exit_yes_button_pressed"]
 [connection signal="close_requested" from="CanvasUI/MainUI/ConvoyUI" to="CanvasUI/MainUI/ConvoyUI" method="_on_close_requested"]

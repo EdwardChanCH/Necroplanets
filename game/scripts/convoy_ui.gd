@@ -40,8 +40,10 @@ func _on_convoy_yes_button_pressed() -> void:
 
 func _on_convoy_no_button_pressed() -> void:
 	set_visible(false)
+	solar_system.deselect_all()
 	pass
 
 func _on_close_requested() -> void:
 	set_visible(false)
+	solar_system.deselect_all()
 	pass

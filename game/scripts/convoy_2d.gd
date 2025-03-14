@@ -62,6 +62,10 @@ func set_convoy(_route: Route2D, _direction: bool, _ship_count: int, _is_alien: 
 		completion = 1
 	
 	$ShipCount.set_text(str(ship_count))
+	if (_is_alien):
+		$ShipCount.set_position(Vector2(-200, 50))
+	else:
+		$ShipCount.set_position(Vector2(-200, -150))
 	route.path.add_child(self)
 	pass
 

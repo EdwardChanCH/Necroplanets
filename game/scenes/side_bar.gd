@@ -1,4 +1,3 @@
-class_name SideBar
 extends HBoxContainer
 
 @export var camera: Camera
@@ -8,6 +7,11 @@ var current_menu_id: int = -1
 
 func _ready() -> void:
 	open_side_menu(0)
+	$SidePanel/OptionsBox/UseCheatCheckBox.set_pressed_no_signal(Global.use_cheat)
+	$SidePanel/OptionsBox/LogScaleCheckBox.set_pressed_no_signal(Global.use_log_scale_map)
+	$SidePanel/OptionsBox/FOVZoomCheckBox.set_pressed_no_signal(Global.use_fov_not_zoom)
+	$SidePanel/OptionsBox/BGMSlider.set_value_no_signal(Global.bgm_value)
+	$SidePanel/OptionsBox/SFXSlider.set_value_no_signal(Global.sfx_value)
 	pass
 
 func get_side_menu(_id: int) -> Node:
@@ -92,9 +96,17 @@ func _on_log_scale_check_box_toggled(toggled_on: bool) -> void:
 	pass
 
 func _on_fov_zoom_check_box_toggled(toggled_on: bool) -> void:
-	Global.change_zoom_not_fov(toggled_on)
+	Global.change_fov_not_zoom(toggled_on)
 	pass
 
 func _on_center_camera_button_pressed() -> void:
 	camera.center_camera()
+	pass
+
+func _on_bgm_slider_value_changed(value: float) -> void:
+	Global.change_bgm_value(value)
+	pass
+
+func _on_sfx_slider_value_changed(value: float) -> void:
+	Global.change_sfx_value(value)
 	pass

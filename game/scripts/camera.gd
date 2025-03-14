@@ -48,10 +48,10 @@ func _process(_delta: float) -> void:
 	
 	if (is_camera_dragging):
 		var new_mouse_pos: Vector2 = get_viewport().get_mouse_position()
-		if (Global.use_zoom_not_fov):
-			set_position(get_position() + (old_mouse_pos - new_mouse_pos) * 1/camera_zoom)
-		else:
+		if (Global.use_fov_not_zoom):
 			set_position(get_position() + (old_mouse_pos - new_mouse_pos) * camera_fov)
+		else:
+			set_position(get_position() + (old_mouse_pos - new_mouse_pos) * 1/camera_zoom)
 		old_mouse_pos = new_mouse_pos
 	
 	pass
@@ -87,10 +87,10 @@ func _unhandled_input(event: InputEvent) -> void:
 	pass
 
 func update_camera_zoom() -> void:
-	if (Global.use_zoom_not_fov):
-		set_zoom(Vector2(camera_zoom, camera_zoom))
-	else:
+	if (Global.use_fov_not_zoom):
 		set_zoom(Vector2(1/camera_fov, 1/camera_fov))
+	else:
+		set_zoom(Vector2(camera_zoom, camera_zoom))
 	pass
 
 func center_camera() -> void:
