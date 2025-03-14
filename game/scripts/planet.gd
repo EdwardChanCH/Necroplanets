@@ -38,6 +38,7 @@ var status: STATUS = STATUS.EMPTY
 var neighbours: Dictionary[int, Route2D] = {}
 var alien_incoming: int = 0
 var human_incoming: int = 0
+var guessed_human_count: int = -1
 
 func logx(value: float, base: float) -> float:
 	base = absf(base)
@@ -114,6 +115,7 @@ func set_alien_count(amount: int, relative: bool = false) -> void:
 		alien_count = amount
 	
 	$AlienLabel.set_text(str(alien_count))
+	redraw_human_count()
 	pass
 
 func set_human_count(amount: int, relative: bool = false) -> void:
@@ -121,8 +123,20 @@ func set_human_count(amount: int, relative: bool = false) -> void:
 		human_count += amount
 	else:
 		human_count = amount
-		
-	$HumanLabel.set_text(str(human_count))
+	
+	redraw_human_count()
+	pass
+
+func redraw_human_count() -> void:
+	if (Global.use_cheat):
+		$HumanLabel.set_text(str(human_count))
+	elif (alien_count > 0):
+		$HumanLabel.set_text(str(human_count))
+		guessed_human_count = human_count
+	elif (guessed_human_count >= 0):
+		$HumanLabel.set_text(str(guessed_human_count) + "?")
+	else:
+		$HumanLabel.set_text("??")
 	pass
 
 func set_alien_incoming(amount: int, relative: bool = false) -> void:

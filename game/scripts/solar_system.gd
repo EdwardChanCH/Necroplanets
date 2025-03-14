@@ -4,7 +4,6 @@ extends Node2D
 const route_2d_res: PackedScene = preload("res://scenes/route_2d.tscn")
 const convoy_2d_res: PackedScene = preload("res://scenes/convoy_2d.tscn")
 
-@export var camera: Camera
 @export var convoyUI: ConvoyUI
 
 var planets: Array[Planet] = []
@@ -13,7 +12,7 @@ var ghost_routes: Array[Route2D] = []
 var selected_ids: Array[int] = []
 
 func _ready() -> void:
-	planets.push_back(Planet.new())
+	planets.push_back($Pluto)
 	planets.push_back($Mercury)
 	planets.push_back($Venus)
 	planets.push_back($Earth)
@@ -22,7 +21,6 @@ func _ready() -> void:
 	planets.push_back($Saturn)
 	planets.push_back($Uranus)
 	planets.push_back($Neptune)
-	planets.push_back($Pluto)
 	
 	for p: Planet in planets:
 		p.planet_selected.connect(_on_planet_selected)
@@ -52,7 +50,7 @@ func _process(_delta: float) -> void:
 	if (selected_ids.size() == 1):
 		redraw_ghost_line(
 			planets[selected_ids[0]].position, 
-			camera.correct_mouse_pos(get_viewport().get_mouse_position())
+			get_global_mouse_position()
 			)
 		
 	pass
@@ -104,6 +102,10 @@ func redraw_map() -> void:
 	pass
 
 func transfer_ships(source: Planet, destination: Planet, amount: int, is_alien: bool, accel: float):
+	if (amount <= 0):
+		deselect_all()
+		return
+	
 	var convoy: Convoy2D = convoy_2d_res.instantiate()
 	var route_id: int = source.planet_id * 10 + destination.planet_id
 	var is_forward: bool = routes.has(route_id)
@@ -114,6 +116,11 @@ func transfer_ships(source: Planet, destination: Planet, amount: int, is_alien: 
 	convoy.has_terminated.connect(_on_convoy_has_terminated)
 	convoy.set_convoy(routes[route_id], is_forward, amount, is_alien, accel)
 	convoy.takeoff()
+	pass
+
+func redraw_human_count() -> void:
+	for p in planets:
+		p.redraw_human_count()
 	pass
 
 func _on_planet_selected(_id: int) -> void:

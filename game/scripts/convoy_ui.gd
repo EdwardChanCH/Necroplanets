@@ -1,10 +1,14 @@
 class_name ConvoyUI
-extends PanelContainer
+extends Window
 
 @export var solar_system: SolarSystem
 
 var source: Planet
 var destination: Planet
+
+func _ready() -> void:
+	set_visible(false)
+	pass
 
 func show_ui(_source: Planet, _destination: Planet) -> void:
 	set_visible(true)
@@ -31,10 +35,13 @@ func _on_amount_slider_value_changed(value: float) -> void:
 
 func _on_convoy_yes_button_pressed() -> void:
 	set_visible(false)
-	if (source.alien_count > 0 or Global.use_cheat):
-		solar_system.transfer_ships(source, destination, $VBox/AmountSlider.value, true, Global.alien_accel)
+	solar_system.transfer_ships(source, destination, $VBox/AmountSlider.value, true, Global.alien_accel)
 	pass
 
 func _on_convoy_no_button_pressed() -> void:
+	set_visible(false)
+	pass
+
+func _on_close_requested() -> void:
 	set_visible(false)
 	pass

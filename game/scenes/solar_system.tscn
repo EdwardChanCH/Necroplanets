@@ -11,6 +11,13 @@ script = ExtResource("1_6rc4i")
 
 [node name="Sun" parent="." instance=ExtResource("1_7e15u")]
 
+[node name="Pluto" parent="." instance=ExtResource("3_5lone")]
+planet_name = "PLUTO"
+radius_au = 39.5
+angle_deg = 270.0
+planet_progress = 100.0
+alien_count = 10
+
 [node name="Mercury" parent="." instance=ExtResource("3_5lone")]
 planet_id = 1
 planet_name = "MERCURY"
@@ -64,14 +71,6 @@ planet_id = 8
 planet_name = "NEPTUNE"
 radius_au = 30.0
 angle_deg = 315.0
-
-[node name="Pluto" parent="." instance=ExtResource("3_5lone")]
-planet_id = 9
-planet_name = "PLUTO"
-radius_au = 39.5
-angle_deg = 270.0
-planet_progress = 100.0
-alien_count = 10
 
 [node name="GhostLine" type="Line2D" parent="."]
 width = 30.0

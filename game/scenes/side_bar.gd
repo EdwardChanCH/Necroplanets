@@ -2,6 +2,7 @@ class_name SideBar
 extends HBoxContainer
 
 @export var camera: Camera
+@export var scroll_box: ScrollContainer
 
 var current_menu_id: int = -1
 
@@ -28,16 +29,22 @@ func get_side_menu(_id: int) -> Node:
 func open_side_menu(_id: int = -1) -> void:
 	if (_id == current_menu_id):
 		$SidePanel.set_visible(!$SidePanel.visible)
+		if ($SidePanel.visible):
+			scroll_box.set_custom_minimum_size(Vector2(520, 0))
+		else:
+			scroll_box.set_custom_minimum_size(Vector2(100, 0))
 		return
 	elif (_id != -1):
 		get_side_menu(current_menu_id).set_visible(false)
 		get_side_menu(_id).set_visible(true)
 		current_menu_id = _id
 		$SidePanel.set_visible(true)
+		scroll_box.set_custom_minimum_size(Vector2(520, 0))
 	pass
 
 func close_side_menu() -> void:
 	$SidePanel.set_visible(false)
+	scroll_box.set_custom_minimum_size(Vector2(100, 0))
 	pass
 
 func _on_menu_button_pressed() -> void:

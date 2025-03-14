@@ -21,6 +21,8 @@ height = 1080
 script = ExtResource("1_sugp2")
 
 [node name="ParallaxBackground" type="ParallaxBackground" parent="."]
+scale = Vector2(2, 2)
+transform = Transform2D(2, 0, 0, 2, 0, 0)
 scroll_ignore_camera_zoom = true
 
 [node name="ParallaxLayer0" type="ParallaxLayer" parent="ParallaxBackground"]
@@ -47,95 +49,105 @@ motion_mirroring = Vector2(1920, 1080)
 position = Vector2(960, 540)
 texture = ExtResource("3_tbgi4")
 
-[node name="SolarSystem" parent="." node_paths=PackedStringArray("camera", "convoyUI") instance=ExtResource("1_o5qli")]
-camera = NodePath("../Camera")
+[node name="SolarSystem" parent="." node_paths=PackedStringArray("convoyUI") instance=ExtResource("1_o5qli")]
 convoyUI = NodePath("../CanvasUI/MainUI/ConvoyUI")
 
 [node name="Camera" type="Camera2D" parent="."]
 position = Vector2(1200, 800)
+position_smoothing_enabled = true
+position_smoothing_speed = 30.0
 script = ExtResource("1_0wfyh")
 
 [node name="CanvasUI" type="CanvasLayer" parent="."]
-layer = 128
+layer = 100
 
 [node name="MainUI" type="Control" parent="CanvasUI"]
 top_level = true
-custom_minimum_size = Vector2(1920, 1080)
 layout_mode = 3
-anchors_preset = 0
-offset_right = 1920.0
-offset_bottom = 1080.0
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 mouse_filter = 2
 
-[node name="HBox" type="HBoxContainer" parent="CanvasUI/MainUI"]
-layout_mode = 2
-offset_right = 1920.0
-offset_bottom = 1080.0
-mouse_filter = 2
+[node name="SBoxMenu" type="ScrollContainer" parent="CanvasUI/MainUI"]
+custom_minimum_size = Vector2(510, 0)
+layout_mode = 1
+anchors_preset = 11
+anchor_left = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -510.0
+grow_horizontal = 0
+grow_vertical = 2
 
-[node name="Spacer" type="Control" parent="CanvasUI/MainUI/HBox"]
+[node name="VBoxMenu" type="VBoxContainer" parent="CanvasUI/MainUI/SBoxMenu"]
 layout_mode = 2
 size_flags_horizontal = 3
+size_flags_vertical = 3
 mouse_filter = 2
 
-[node name="SideBar" type="HBoxContainer" parent="CanvasUI/MainUI/HBox" node_paths=PackedStringArray("camera")]
+[node name="HBoxMenu" type="HBoxContainer" parent="CanvasUI/MainUI/SBoxMenu/VBoxMenu" node_paths=PackedStringArray("camera", "scroll_box")]
 layout_mode = 2
+size_flags_vertical = 3
 mouse_filter = 2
 script = ExtResource("2_tefeu")
-camera = NodePath("../../../../Camera")
+camera = NodePath("../../../../../Camera")
+scroll_box = NodePath("../..")
 
-[node name="VBoxButton" type="VBoxContainer" parent="CanvasUI/MainUI/HBox/SideBar"]
+[node name="VBoxButton" type="VBoxContainer" parent="CanvasUI/MainUI/SBoxMenu/VBoxMenu/HBoxMenu"]
 layout_mode = 2
 mouse_filter = 2
 
-[node name="MenuButton" type="Button" parent="CanvasUI/MainUI/HBox/SideBar/VBoxButton"]
+[node name="MenuButton" type="Button" parent="CanvasUI/MainUI/SBoxMenu/VBoxMenu/HBoxMenu/VBoxButton"]
 layout_mode = 2
 theme_override_font_sizes/font_size = 48
 text = " ☰ "
 
-[node name="SettingsButton" type="Button" parent="CanvasUI/MainUI/HBox/SideBar/VBoxButton"]
+[node name="SettingsButton" type="Button" parent="CanvasUI/MainUI/SBoxMenu/VBoxMenu/HBoxMenu/VBoxButton"]
 layout_mode = 2
 theme_override_font_sizes/font_size = 48
 text = " ⚙ "
 
-[node name="NewsButton" type="Button" parent="CanvasUI/MainUI/HBox/SideBar/VBoxButton"]
+[node name="NewsButton" type="Button" parent="CanvasUI/MainUI/SBoxMenu/VBoxMenu/HBoxMenu/VBoxButton"]
 layout_mode = 2
 theme_override_font_sizes/font_size = 48
 text = " ⚠ "
 
-[node name="GuideButton" type="Button" parent="CanvasUI/MainUI/HBox/SideBar/VBoxButton"]
+[node name="GuideButton" type="Button" parent="CanvasUI/MainUI/SBoxMenu/VBoxMenu/HBoxMenu/VBoxButton"]
 layout_mode = 2
 theme_override_font_sizes/font_size = 48
 text = " ? "
 
-[node name="CreditsButton" type="Button" parent="CanvasUI/MainUI/HBox/SideBar/VBoxButton"]
+[node name="CreditsButton" type="Button" parent="CanvasUI/MainUI/SBoxMenu/VBoxMenu/HBoxMenu/VBoxButton"]
 layout_mode = 2
 theme_override_font_sizes/font_size = 48
 text = " © "
 
-[node name="Spacer" type="Panel" parent="CanvasUI/MainUI/HBox/SideBar/VBoxButton"]
+[node name="Spacer" type="Panel" parent="CanvasUI/MainUI/SBoxMenu/VBoxMenu/HBoxMenu/VBoxButton"]
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="ExitButton" type="Button" parent="CanvasUI/MainUI/HBox/SideBar/VBoxButton"]
+[node name="ExitButton" type="Button" parent="CanvasUI/MainUI/SBoxMenu/VBoxMenu/HBoxMenu/VBoxButton"]
 layout_mode = 2
 theme_override_font_sizes/font_size = 48
 text = " ☒ "
 
-[node name="SidePanel" type="PanelContainer" parent="CanvasUI/MainUI/HBox/SideBar"]
+[node name="SidePanel" type="PanelContainer" parent="CanvasUI/MainUI/SBoxMenu/VBoxMenu/HBoxMenu"]
 self_modulate = Color(0, 1, 0, 1)
-custom_minimum_size = Vector2(400, 0)
 layout_mode = 2
+size_flags_horizontal = 3
 mouse_filter = 2
 
-[node name="MenuBox" type="VBoxContainer" parent="CanvasUI/MainUI/HBox/SideBar/SidePanel"]
+[node name="MenuBox" type="VBoxContainer" parent="CanvasUI/MainUI/SBoxMenu/VBoxMenu/HBoxMenu/SidePanel"]
 visible = false
 layout_mode = 2
 mouse_filter = 2
 
-[node name="Heading" type="Label" parent="CanvasUI/MainUI/HBox/SideBar/SidePanel/MenuBox"]
+[node name="Heading" type="Label" parent="CanvasUI/MainUI/SBoxMenu/VBoxMenu/HBoxMenu/SidePanel/MenuBox"]
 custom_minimum_size = Vector2(0, 70)
 layout_mode = 2
 theme_override_font_sizes/font_size = 32
@@ -143,7 +155,7 @@ text = "Necroplanets"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="Paragraph" type="Label" parent="CanvasUI/MainUI/HBox/SideBar/SidePanel/MenuBox"]
+[node name="Paragraph" type="Label" parent="CanvasUI/MainUI/SBoxMenu/VBoxMenu/HBoxMenu/SidePanel/MenuBox"]
 custom_minimum_size = Vector2(0, 70)
 layout_mode = 2
 theme_override_font_sizes/font_size = 24
@@ -166,17 +178,17 @@ horizontal_alignment = 1
 vertical_alignment = 1
 autowrap_mode = 3
 
-[node name="StartButton" type="Button" parent="CanvasUI/MainUI/HBox/SideBar/SidePanel/MenuBox"]
+[node name="StartButton" type="Button" parent="CanvasUI/MainUI/SBoxMenu/VBoxMenu/HBoxMenu/SidePanel/MenuBox"]
 layout_mode = 2
 theme_override_font_sizes/font_size = 24
 text = "Start Game"
 
-[node name="OptionsBox" type="VBoxContainer" parent="CanvasUI/MainUI/HBox/SideBar/SidePanel"]
+[node name="OptionsBox" type="VBoxContainer" parent="CanvasUI/MainUI/SBoxMenu/VBoxMenu/HBoxMenu/SidePanel"]
 visible = false
 layout_mode = 2
 mouse_filter = 2
 
-[node name="Heading" type="Label" parent="CanvasUI/MainUI/HBox/SideBar/SidePanel/OptionsBox"]
+[node name="Heading" type="Label" parent="CanvasUI/MainUI/SBoxMenu/VBoxMenu/HBoxMenu/SidePanel/OptionsBox"]
 custom_minimum_size = Vector2(0, 70)
 layout_mode = 2
 theme_override_font_sizes/font_size = 32
@@ -184,7 +196,7 @@ text = "Settings"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="Paragraph1" type="Label" parent="CanvasUI/MainUI/HBox/SideBar/SidePanel/OptionsBox"]
+[node name="Paragraph1" type="Label" parent="CanvasUI/MainUI/SBoxMenu/VBoxMenu/HBoxMenu/SidePanel/OptionsBox"]
 custom_minimum_size = Vector2(0, 70)
 layout_mode = 2
 theme_override_font_sizes/font_size = 24
@@ -192,34 +204,34 @@ horizontal_alignment = 1
 vertical_alignment = 1
 autowrap_mode = 3
 
-[node name="UseCheatCheckBox2" type="CheckButton" parent="CanvasUI/MainUI/HBox/SideBar/SidePanel/OptionsBox"]
+[node name="UseCheatCheckBox2" type="CheckButton" parent="CanvasUI/MainUI/SBoxMenu/VBoxMenu/HBoxMenu/SidePanel/OptionsBox"]
 layout_mode = 2
 theme_override_font_sizes/font_size = 24
 text = "Use Cheats"
 
-[node name="LogScaleCheckBox" type="CheckButton" parent="CanvasUI/MainUI/HBox/SideBar/SidePanel/OptionsBox"]
+[node name="LogScaleCheckBox" type="CheckButton" parent="CanvasUI/MainUI/SBoxMenu/VBoxMenu/HBoxMenu/SidePanel/OptionsBox"]
 layout_mode = 2
 theme_override_font_sizes/font_size = 24
 button_pressed = true
 text = "Use Logarithmic Map Scale"
 
-[node name="FOVZoomCheckBox2" type="CheckButton" parent="CanvasUI/MainUI/HBox/SideBar/SidePanel/OptionsBox"]
+[node name="FOVZoomCheckBox2" type="CheckButton" parent="CanvasUI/MainUI/SBoxMenu/VBoxMenu/HBoxMenu/SidePanel/OptionsBox"]
 layout_mode = 2
 theme_override_font_sizes/font_size = 24
 button_pressed = true
 text = "Use FOV For Camera Zoom"
 
-[node name="CenterCameraButton" type="Button" parent="CanvasUI/MainUI/HBox/SideBar/SidePanel/OptionsBox"]
+[node name="CenterCameraButton" type="Button" parent="CanvasUI/MainUI/SBoxMenu/VBoxMenu/HBoxMenu/SidePanel/OptionsBox"]
 layout_mode = 2
 theme_override_font_sizes/font_size = 24
 text = "Center Camera"
 
-[node name="NewsBox" type="VBoxContainer" parent="CanvasUI/MainUI/HBox/SideBar/SidePanel"]
+[node name="NewsBox" type="VBoxContainer" parent="CanvasUI/MainUI/SBoxMenu/VBoxMenu/HBoxMenu/SidePanel"]
 visible = false
 layout_mode = 2
 mouse_filter = 2
 
-[node name="Heading" type="Label" parent="CanvasUI/MainUI/HBox/SideBar/SidePanel/NewsBox"]
+[node name="Heading" type="Label" parent="CanvasUI/MainUI/SBoxMenu/VBoxMenu/HBoxMenu/SidePanel/NewsBox"]
 custom_minimum_size = Vector2(0, 70)
 layout_mode = 2
 theme_override_font_sizes/font_size = 32
@@ -227,7 +239,7 @@ text = "Galatic News"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="Paragraph" type="Label" parent="CanvasUI/MainUI/HBox/SideBar/SidePanel/NewsBox"]
+[node name="Paragraph" type="Label" parent="CanvasUI/MainUI/SBoxMenu/VBoxMenu/HBoxMenu/SidePanel/NewsBox"]
 custom_minimum_size = Vector2(0, 70)
 layout_mode = 2
 theme_override_font_sizes/font_size = 24
@@ -238,12 +250,12 @@ horizontal_alignment = 1
 vertical_alignment = 1
 autowrap_mode = 3
 
-[node name="GuideBox" type="VBoxContainer" parent="CanvasUI/MainUI/HBox/SideBar/SidePanel"]
+[node name="GuideBox" type="VBoxContainer" parent="CanvasUI/MainUI/SBoxMenu/VBoxMenu/HBoxMenu/SidePanel"]
 visible = false
 layout_mode = 2
 mouse_filter = 2
 
-[node name="Heading" type="Label" parent="CanvasUI/MainUI/HBox/SideBar/SidePanel/GuideBox"]
+[node name="Heading" type="Label" parent="CanvasUI/MainUI/SBoxMenu/VBoxMenu/HBoxMenu/SidePanel/GuideBox"]
 custom_minimum_size = Vector2(0, 70)
 layout_mode = 2
 theme_override_font_sizes/font_size = 32
@@ -251,15 +263,15 @@ text = "How To Play"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="ScrollBox" type="ScrollContainer" parent="CanvasUI/MainUI/HBox/SideBar/SidePanel/GuideBox"]
+[node name="ScrollBox" type="ScrollContainer" parent="CanvasUI/MainUI/SBoxMenu/VBoxMenu/HBoxMenu/SidePanel/GuideBox"]
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="VBox" type="VBoxContainer" parent="CanvasUI/MainUI/HBox/SideBar/SidePanel/GuideBox/ScrollBox"]
+[node name="VBox" type="VBoxContainer" parent="CanvasUI/MainUI/SBoxMenu/VBoxMenu/HBoxMenu/SidePanel/GuideBox/ScrollBox"]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="Paragraph" type="Label" parent="CanvasUI/MainUI/HBox/SideBar/SidePanel/GuideBox/ScrollBox/VBox"]
+[node name="Paragraph" type="Label" parent="CanvasUI/MainUI/SBoxMenu/VBoxMenu/HBoxMenu/SidePanel/GuideBox/ScrollBox/VBox"]
 custom_minimum_size = Vector2(0, 70)
 layout_mode = 2
 theme_override_font_sizes/font_size = 24
@@ -290,12 +302,12 @@ text = "
 vertical_alignment = 1
 autowrap_mode = 3
 
-[node name="CreditsBox" type="VBoxContainer" parent="CanvasUI/MainUI/HBox/SideBar/SidePanel"]
+[node name="CreditsBox" type="VBoxContainer" parent="CanvasUI/MainUI/SBoxMenu/VBoxMenu/HBoxMenu/SidePanel"]
 visible = false
 layout_mode = 2
 mouse_filter = 2
 
-[node name="Heading" type="Label" parent="CanvasUI/MainUI/HBox/SideBar/SidePanel/CreditsBox"]
+[node name="Heading" type="Label" parent="CanvasUI/MainUI/SBoxMenu/VBoxMenu/HBoxMenu/SidePanel/CreditsBox"]
 custom_minimum_size = Vector2(0, 70)
 layout_mode = 2
 theme_override_font_sizes/font_size = 32
@@ -303,7 +315,7 @@ text = "Credits"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="Paragraph" type="Label" parent="CanvasUI/MainUI/HBox/SideBar/SidePanel/CreditsBox"]
+[node name="Paragraph" type="Label" parent="CanvasUI/MainUI/SBoxMenu/VBoxMenu/HBoxMenu/SidePanel/CreditsBox"]
 custom_minimum_size = Vector2(0, 70)
 layout_mode = 2
 theme_override_font_sizes/font_size = 24
@@ -316,12 +328,12 @@ text = "
 vertical_alignment = 1
 autowrap_mode = 3
 
-[node name="ExitBox" type="VBoxContainer" parent="CanvasUI/MainUI/HBox/SideBar/SidePanel"]
+[node name="ExitBox" type="VBoxContainer" parent="CanvasUI/MainUI/SBoxMenu/VBoxMenu/HBoxMenu/SidePanel"]
 visible = false
 layout_mode = 2
 mouse_filter = 2
 
-[node name="Heading" type="Label" parent="CanvasUI/MainUI/HBox/SideBar/SidePanel/ExitBox"]
+[node name="Heading" type="Label" parent="CanvasUI/MainUI/SBoxMenu/VBoxMenu/HBoxMenu/SidePanel/ExitBox"]
 custom_minimum_size = Vector2(0, 70)
 layout_mode = 2
 theme_override_font_sizes/font_size = 32
@@ -329,7 +341,7 @@ text = "Exit Game"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="Paragraph" type="Label" parent="CanvasUI/MainUI/HBox/SideBar/SidePanel/ExitBox"]
+[node name="Paragraph" type="Label" parent="CanvasUI/MainUI/SBoxMenu/VBoxMenu/HBoxMenu/SidePanel/ExitBox"]
 custom_minimum_size = Vector2(0, 70)
 layout_mode = 2
 theme_override_font_sizes/font_size = 24
@@ -344,54 +356,37 @@ horizontal_alignment = 1
 vertical_alignment = 1
 autowrap_mode = 3
 
-[node name="ExitNoButton" type="Button" parent="CanvasUI/MainUI/HBox/SideBar/SidePanel/ExitBox"]
+[node name="ExitNoButton" type="Button" parent="CanvasUI/MainUI/SBoxMenu/VBoxMenu/HBoxMenu/SidePanel/ExitBox"]
 layout_mode = 2
 theme_override_font_sizes/font_size = 24
 text = "No, 
 I don't want to die!"
 
-[node name="ExitYesButton" type="Button" parent="CanvasUI/MainUI/HBox/SideBar/SidePanel/ExitBox"]
+[node name="ExitYesButton" type="Button" parent="CanvasUI/MainUI/SBoxMenu/VBoxMenu/HBoxMenu/SidePanel/ExitBox"]
 layout_mode = 2
 theme_override_font_sizes/font_size = 24
 text = "Yes."
 
-[node name="ConvoyUI" type="PanelContainer" parent="CanvasUI/MainUI" node_paths=PackedStringArray("solar_system")]
-visible = false
-self_modulate = Color(0, 1, 0, 1)
-custom_minimum_size = Vector2(480, 360)
-layout_mode = 1
-anchors_preset = 2
-anchor_top = 1.0
-anchor_bottom = 1.0
-offset_top = -360.0
-offset_right = 480.0
-grow_vertical = 0
-mouse_filter = 2
+[node name="ConvoyUI" type="Window" parent="CanvasUI/MainUI" node_paths=PackedStringArray("solar_system")]
+title = "Transfer Window"
+initial_position = 2
+size = Vector2i(500, 250)
+always_on_top = true
 script = ExtResource("7_o6xl0")
 solar_system = NodePath("../../../SolarSystem")
 
 [node name="VBox" type="VBoxContainer" parent="CanvasUI/MainUI/ConvoyUI"]
-layout_mode = 2
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 mouse_filter = 2
-
-[node name="HBox1" type="HBoxContainer" parent="CanvasUI/MainUI/ConvoyUI/VBox"]
-layout_mode = 2
-mouse_filter = 2
-
-[node name="Spacer" type="PanelContainer" parent="CanvasUI/MainUI/ConvoyUI/VBox/HBox1"]
-layout_mode = 2
-size_flags_horizontal = 3
-mouse_filter = 2
-
-[node name="ConvoyNoButton" type="Button" parent="CanvasUI/MainUI/ConvoyUI/VBox/HBox1"]
-layout_mode = 2
-theme_override_font_sizes/font_size = 16
-text = "  X  "
 
 [node name="Text1" type="Label" parent="CanvasUI/MainUI/ConvoyUI/VBox"]
 layout_mode = 2
 theme_override_font_sizes/font_size = 16
-text = "   Transfer Orbit:"
+text = "   Orbit:"
 
 [node name="HBox2" type="HBoxContainer" parent="CanvasUI/MainUI/ConvoyUI/VBox"]
 layout_mode = 2
@@ -420,15 +415,11 @@ theme_override_font_sizes/font_size = 24
 text = "Destination"
 horizontal_alignment = 1
 
-[node name="Spacer2" type="Control" parent="CanvasUI/MainUI/ConvoyUI/VBox"]
-custom_minimum_size = Vector2(0, 30)
-layout_mode = 2
-mouse_filter = 2
-
 [node name="Text2" type="Label" parent="CanvasUI/MainUI/ConvoyUI/VBox"]
 layout_mode = 2
 theme_override_font_sizes/font_size = 16
-text = "   Number of Ships:"
+text = "
+   Number of Ships:"
 
 [node name="AmountLabel" type="Label" parent="CanvasUI/MainUI/ConvoyUI/VBox"]
 layout_mode = 2
@@ -443,13 +434,14 @@ rounded = true
 tick_count = 5
 ticks_on_borders = true
 
-[node name="Spacer1" type="Control" parent="CanvasUI/MainUI/ConvoyUI/VBox"]
+[node name="Spacer" type="Control" parent="CanvasUI/MainUI/ConvoyUI/VBox"]
+custom_minimum_size = Vector2(0, 30)
 layout_mode = 2
-size_flags_vertical = 3
 mouse_filter = 2
 
 [node name="HBox3" type="HBoxContainer" parent="CanvasUI/MainUI/ConvoyUI/VBox"]
 layout_mode = 2
+size_flags_vertical = 3
 mouse_filter = 2
 
 [node name="ConvoyYesButton" type="Button" parent="CanvasUI/MainUI/ConvoyUI/VBox/HBox3"]
@@ -459,26 +451,26 @@ size_flags_stretch_ratio = 3.0
 theme_override_font_sizes/font_size = 24
 text = "Attack!"
 
-[node name="ConvoyNoButton2" type="Button" parent="CanvasUI/MainUI/ConvoyUI/VBox/HBox3"]
+[node name="ConvoyNoButton" type="Button" parent="CanvasUI/MainUI/ConvoyUI/VBox/HBox3"]
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_font_sizes/font_size = 24
 text = "Cancel"
 
-[connection signal="pressed" from="CanvasUI/MainUI/HBox/SideBar/VBoxButton/MenuButton" to="CanvasUI/MainUI/HBox/SideBar" method="_on_menu_button_pressed"]
-[connection signal="pressed" from="CanvasUI/MainUI/HBox/SideBar/VBoxButton/SettingsButton" to="CanvasUI/MainUI/HBox/SideBar" method="_on_settings_button_pressed"]
-[connection signal="pressed" from="CanvasUI/MainUI/HBox/SideBar/VBoxButton/NewsButton" to="CanvasUI/MainUI/HBox/SideBar" method="_on_news_button_pressed"]
-[connection signal="pressed" from="CanvasUI/MainUI/HBox/SideBar/VBoxButton/GuideButton" to="CanvasUI/MainUI/HBox/SideBar" method="_on_guide_button_pressed"]
-[connection signal="pressed" from="CanvasUI/MainUI/HBox/SideBar/VBoxButton/CreditsButton" to="CanvasUI/MainUI/HBox/SideBar" method="_on_credits_button_pressed"]
-[connection signal="pressed" from="CanvasUI/MainUI/HBox/SideBar/VBoxButton/ExitButton" to="CanvasUI/MainUI/HBox/SideBar" method="_on_exit_button_pressed"]
-[connection signal="pressed" from="CanvasUI/MainUI/HBox/SideBar/SidePanel/MenuBox/StartButton" to="CanvasUI/MainUI/HBox/SideBar" method="_on_start_button_pressed"]
-[connection signal="toggled" from="CanvasUI/MainUI/HBox/SideBar/SidePanel/OptionsBox/UseCheatCheckBox2" to="CanvasUI/MainUI/HBox/SideBar" method="_on_use_cheat_check_box_toggled"]
-[connection signal="toggled" from="CanvasUI/MainUI/HBox/SideBar/SidePanel/OptionsBox/LogScaleCheckBox" to="CanvasUI/MainUI/HBox/SideBar" method="_on_log_scale_check_box_toggled"]
-[connection signal="toggled" from="CanvasUI/MainUI/HBox/SideBar/SidePanel/OptionsBox/FOVZoomCheckBox2" to="CanvasUI/MainUI/HBox/SideBar" method="_on_fov_zoom_check_box_toggled"]
-[connection signal="pressed" from="CanvasUI/MainUI/HBox/SideBar/SidePanel/OptionsBox/CenterCameraButton" to="CanvasUI/MainUI/HBox/SideBar" method="_on_center_camera_button_pressed"]
-[connection signal="pressed" from="CanvasUI/MainUI/HBox/SideBar/SidePanel/ExitBox/ExitNoButton" to="CanvasUI/MainUI/HBox/SideBar" method="_on_exit_no_button_pressed"]
-[connection signal="pressed" from="CanvasUI/MainUI/HBox/SideBar/SidePanel/ExitBox/ExitYesButton" to="CanvasUI/MainUI/HBox/SideBar" method="_on_exit_yes_button_pressed"]
-[connection signal="pressed" from="CanvasUI/MainUI/ConvoyUI/VBox/HBox1/ConvoyNoButton" to="CanvasUI/MainUI/ConvoyUI" method="_on_convoy_no_button_pressed"]
+[connection signal="pressed" from="CanvasUI/MainUI/SBoxMenu/VBoxMenu/HBoxMenu/VBoxButton/MenuButton" to="CanvasUI/MainUI/SBoxMenu/VBoxMenu/HBoxMenu" method="_on_menu_button_pressed"]
+[connection signal="pressed" from="CanvasUI/MainUI/SBoxMenu/VBoxMenu/HBoxMenu/VBoxButton/SettingsButton" to="CanvasUI/MainUI/SBoxMenu/VBoxMenu/HBoxMenu" method="_on_settings_button_pressed"]
+[connection signal="pressed" from="CanvasUI/MainUI/SBoxMenu/VBoxMenu/HBoxMenu/VBoxButton/NewsButton" to="CanvasUI/MainUI/SBoxMenu/VBoxMenu/HBoxMenu" method="_on_news_button_pressed"]
+[connection signal="pressed" from="CanvasUI/MainUI/SBoxMenu/VBoxMenu/HBoxMenu/VBoxButton/GuideButton" to="CanvasUI/MainUI/SBoxMenu/VBoxMenu/HBoxMenu" method="_on_guide_button_pressed"]
+[connection signal="pressed" from="CanvasUI/MainUI/SBoxMenu/VBoxMenu/HBoxMenu/VBoxButton/CreditsButton" to="CanvasUI/MainUI/SBoxMenu/VBoxMenu/HBoxMenu" method="_on_credits_button_pressed"]
+[connection signal="pressed" from="CanvasUI/MainUI/SBoxMenu/VBoxMenu/HBoxMenu/VBoxButton/ExitButton" to="CanvasUI/MainUI/SBoxMenu/VBoxMenu/HBoxMenu" method="_on_exit_button_pressed"]
+[connection signal="pressed" from="CanvasUI/MainUI/SBoxMenu/VBoxMenu/HBoxMenu/SidePanel/MenuBox/StartButton" to="CanvasUI/MainUI/SBoxMenu/VBoxMenu/HBoxMenu" method="_on_start_button_pressed"]
+[connection signal="toggled" from="CanvasUI/MainUI/SBoxMenu/VBoxMenu/HBoxMenu/SidePanel/OptionsBox/UseCheatCheckBox2" to="CanvasUI/MainUI/SBoxMenu/VBoxMenu/HBoxMenu" method="_on_use_cheat_check_box_toggled"]
+[connection signal="toggled" from="CanvasUI/MainUI/SBoxMenu/VBoxMenu/HBoxMenu/SidePanel/OptionsBox/LogScaleCheckBox" to="CanvasUI/MainUI/SBoxMenu/VBoxMenu/HBoxMenu" method="_on_log_scale_check_box_toggled"]
+[connection signal="toggled" from="CanvasUI/MainUI/SBoxMenu/VBoxMenu/HBoxMenu/SidePanel/OptionsBox/FOVZoomCheckBox2" to="CanvasUI/MainUI/SBoxMenu/VBoxMenu/HBoxMenu" method="_on_fov_zoom_check_box_toggled"]
+[connection signal="pressed" from="CanvasUI/MainUI/SBoxMenu/VBoxMenu/HBoxMenu/SidePanel/OptionsBox/CenterCameraButton" to="CanvasUI/MainUI/SBoxMenu/VBoxMenu/HBoxMenu" method="_on_center_camera_button_pressed"]
+[connection signal="pressed" from="CanvasUI/MainUI/SBoxMenu/VBoxMenu/HBoxMenu/SidePanel/ExitBox/ExitNoButton" to="CanvasUI/MainUI/SBoxMenu/VBoxMenu/HBoxMenu" method="_on_exit_no_button_pressed"]
+[connection signal="pressed" from="CanvasUI/MainUI/SBoxMenu/VBoxMenu/HBoxMenu/SidePanel/ExitBox/ExitYesButton" to="CanvasUI/MainUI/SBoxMenu/VBoxMenu/HBoxMenu" method="_on_exit_yes_button_pressed"]
+[connection signal="close_requested" from="CanvasUI/MainUI/ConvoyUI" to="CanvasUI/MainUI/ConvoyUI" method="_on_close_requested"]
 [connection signal="value_changed" from="CanvasUI/MainUI/ConvoyUI/VBox/AmountSlider" to="CanvasUI/MainUI/ConvoyUI" method="_on_amount_slider_value_changed"]
 [connection signal="pressed" from="CanvasUI/MainUI/ConvoyUI/VBox/HBox3/ConvoyYesButton" to="CanvasUI/MainUI/ConvoyUI" method="_on_convoy_yes_button_pressed"]
-[connection signal="pressed" from="CanvasUI/MainUI/ConvoyUI/VBox/HBox3/ConvoyNoButton2" to="CanvasUI/MainUI/ConvoyUI" method="_on_convoy_no_button_pressed"]
+[connection signal="pressed" from="CanvasUI/MainUI/ConvoyUI/VBox/HBox3/ConvoyNoButton" to="CanvasUI/MainUI/ConvoyUI" method="_on_convoy_no_button_pressed"]
