@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=3 uid="uid://dr06sl28j0mq"]
+[gd_scene load_steps=16 format=3 uid="uid://dr06sl28j0mq"]
 
 [ext_resource type="Script" uid="uid://j86twos6ww6k" path="res://scripts/camera.gd" id="1_0wfyh"]
 [ext_resource type="PackedScene" uid="uid://bbwps7161hhpl" path="res://scenes/solar_system.tscn" id="1_o5qli"]
@@ -7,6 +7,12 @@
 [ext_resource type="Script" uid="uid://dd8xhfvuccvtl" path="res://scenes/side_bar.gd" id="2_tefeu"]
 [ext_resource type="Texture2D" uid="uid://dtgfoyyvt61qa" path="res://assets/background_stars_2.png" id="3_tbgi4"]
 [ext_resource type="Script" uid="uid://d1c8y4j2u0we0" path="res://scripts/convoy_ui.gd" id="7_o6xl0"]
+[ext_resource type="Texture2D" uid="uid://dfi4mmt542lcg" path="res://assets/icon_menubar.png" id="7_trceg"]
+[ext_resource type="Texture2D" uid="uid://dfoguboowcmvj" path="res://assets/icon_settings.png" id="8_a8y0u"]
+[ext_resource type="Texture2D" uid="uid://b5162sb35448e" path="res://assets/icon_news.png" id="9_jkv2x"]
+[ext_resource type="Texture2D" uid="uid://b7h65jkwd557t" path="res://assets/icon_help.png" id="10_jbj1t"]
+[ext_resource type="Texture2D" uid="uid://bn1fhl4cioy2y" path="res://assets/icon_credits.png" id="11_muem4"]
+[ext_resource type="Texture2D" uid="uid://bfwxaftkxe75d" path="res://assets/icon_exit.png" id="12_dp3eg"]
 
 [sub_resource type="Gradient" id="Gradient_sugp2"]
 offsets = PackedFloat32Array(0)
@@ -74,13 +80,12 @@ size_flags_vertical = 3
 mouse_filter = 2
 
 [node name="SBoxMenu" type="ScrollContainer" parent="CanvasUI/MainUI"]
-custom_minimum_size = Vector2(510, 0)
+custom_minimum_size = Vector2(520, 0)
 layout_mode = 1
 anchors_preset = 11
 anchor_left = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = -510.0
 grow_horizontal = 0
 grow_vertical = 2
 
@@ -98,43 +103,57 @@ script = ExtResource("2_tefeu")
 camera = NodePath("../../../../../Camera")
 scroll_box = NodePath("../..")
 
-[node name="VBoxButton" type="VBoxContainer" parent="CanvasUI/MainUI/SBoxMenu/VBoxMenu/HBoxMenu"]
+[node name="MBox1" type="MarginContainer" parent="CanvasUI/MainUI/SBoxMenu/VBoxMenu/HBoxMenu"]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/margin_left = 5
+theme_override_constants/margin_top = 5
+theme_override_constants/margin_right = 5
+theme_override_constants/margin_bottom = 5
+
+[node name="VBoxButton" type="VBoxContainer" parent="CanvasUI/MainUI/SBoxMenu/VBoxMenu/HBoxMenu/MBox1"]
 layout_mode = 2
 mouse_filter = 2
 
-[node name="MenuButton" type="Button" parent="CanvasUI/MainUI/SBoxMenu/VBoxMenu/HBoxMenu/VBoxButton"]
+[node name="MenuButton" type="Button" parent="CanvasUI/MainUI/SBoxMenu/VBoxMenu/HBoxMenu/MBox1/VBoxButton"]
 layout_mode = 2
 theme_override_font_sizes/font_size = 48
-text = " ☰ "
+icon = ExtResource("7_trceg")
+icon_alignment = 1
 
-[node name="SettingsButton" type="Button" parent="CanvasUI/MainUI/SBoxMenu/VBoxMenu/HBoxMenu/VBoxButton"]
+[node name="SettingsButton" type="Button" parent="CanvasUI/MainUI/SBoxMenu/VBoxMenu/HBoxMenu/MBox1/VBoxButton"]
 layout_mode = 2
 theme_override_font_sizes/font_size = 48
-text = " ⚙ "
+icon = ExtResource("8_a8y0u")
+icon_alignment = 1
 
-[node name="NewsButton" type="Button" parent="CanvasUI/MainUI/SBoxMenu/VBoxMenu/HBoxMenu/VBoxButton"]
+[node name="NewsButton" type="Button" parent="CanvasUI/MainUI/SBoxMenu/VBoxMenu/HBoxMenu/MBox1/VBoxButton"]
 layout_mode = 2
 theme_override_font_sizes/font_size = 48
-text = " ⚠ "
+icon = ExtResource("9_jkv2x")
+icon_alignment = 1
 
-[node name="GuideButton" type="Button" parent="CanvasUI/MainUI/SBoxMenu/VBoxMenu/HBoxMenu/VBoxButton"]
+[node name="GuideButton" type="Button" parent="CanvasUI/MainUI/SBoxMenu/VBoxMenu/HBoxMenu/MBox1/VBoxButton"]
 layout_mode = 2
 theme_override_font_sizes/font_size = 48
-text = " ? "
+icon = ExtResource("10_jbj1t")
+icon_alignment = 1
 
-[node name="CreditsButton" type="Button" parent="CanvasUI/MainUI/SBoxMenu/VBoxMenu/HBoxMenu/VBoxButton"]
+[node name="CreditsButton" type="Button" parent="CanvasUI/MainUI/SBoxMenu/VBoxMenu/HBoxMenu/MBox1/VBoxButton"]
 layout_mode = 2
 theme_override_font_sizes/font_size = 48
-text = " © "
+icon = ExtResource("11_muem4")
+icon_alignment = 1
 
-[node name="Spacer" type="Panel" parent="CanvasUI/MainUI/SBoxMenu/VBoxMenu/HBoxMenu/VBoxButton"]
+[node name="Spacer" type="Panel" parent="CanvasUI/MainUI/SBoxMenu/VBoxMenu/HBoxMenu/MBox1/VBoxButton"]
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="ExitButton" type="Button" parent="CanvasUI/MainUI/SBoxMenu/VBoxMenu/HBoxMenu/VBoxButton"]
+[node name="ExitButton" type="Button" parent="CanvasUI/MainUI/SBoxMenu/VBoxMenu/HBoxMenu/MBox1/VBoxButton"]
 layout_mode = 2
 theme_override_font_sizes/font_size = 48
-text = " ☒ "
+icon = ExtResource("12_dp3eg")
+icon_alignment = 1
 
 [node name="SidePanel" type="PanelContainer" parent="CanvasUI/MainUI/SBoxMenu/VBoxMenu/HBoxMenu"]
 self_modulate = Color(0, 1, 0, 1)
@@ -143,7 +162,6 @@ size_flags_horizontal = 3
 mouse_filter = 2
 
 [node name="MenuBox" type="VBoxContainer" parent="CanvasUI/MainUI/SBoxMenu/VBoxMenu/HBoxMenu/SidePanel"]
-visible = false
 layout_mode = 2
 mouse_filter = 2
 
@@ -457,12 +475,12 @@ size_flags_horizontal = 3
 theme_override_font_sizes/font_size = 24
 text = "Cancel"
 
-[connection signal="pressed" from="CanvasUI/MainUI/SBoxMenu/VBoxMenu/HBoxMenu/VBoxButton/MenuButton" to="CanvasUI/MainUI/SBoxMenu/VBoxMenu/HBoxMenu" method="_on_menu_button_pressed"]
-[connection signal="pressed" from="CanvasUI/MainUI/SBoxMenu/VBoxMenu/HBoxMenu/VBoxButton/SettingsButton" to="CanvasUI/MainUI/SBoxMenu/VBoxMenu/HBoxMenu" method="_on_settings_button_pressed"]
-[connection signal="pressed" from="CanvasUI/MainUI/SBoxMenu/VBoxMenu/HBoxMenu/VBoxButton/NewsButton" to="CanvasUI/MainUI/SBoxMenu/VBoxMenu/HBoxMenu" method="_on_news_button_pressed"]
-[connection signal="pressed" from="CanvasUI/MainUI/SBoxMenu/VBoxMenu/HBoxMenu/VBoxButton/GuideButton" to="CanvasUI/MainUI/SBoxMenu/VBoxMenu/HBoxMenu" method="_on_guide_button_pressed"]
-[connection signal="pressed" from="CanvasUI/MainUI/SBoxMenu/VBoxMenu/HBoxMenu/VBoxButton/CreditsButton" to="CanvasUI/MainUI/SBoxMenu/VBoxMenu/HBoxMenu" method="_on_credits_button_pressed"]
-[connection signal="pressed" from="CanvasUI/MainUI/SBoxMenu/VBoxMenu/HBoxMenu/VBoxButton/ExitButton" to="CanvasUI/MainUI/SBoxMenu/VBoxMenu/HBoxMenu" method="_on_exit_button_pressed"]
+[connection signal="pressed" from="CanvasUI/MainUI/SBoxMenu/VBoxMenu/HBoxMenu/MBox1/VBoxButton/MenuButton" to="CanvasUI/MainUI/SBoxMenu/VBoxMenu/HBoxMenu" method="_on_menu_button_pressed"]
+[connection signal="pressed" from="CanvasUI/MainUI/SBoxMenu/VBoxMenu/HBoxMenu/MBox1/VBoxButton/SettingsButton" to="CanvasUI/MainUI/SBoxMenu/VBoxMenu/HBoxMenu" method="_on_settings_button_pressed"]
+[connection signal="pressed" from="CanvasUI/MainUI/SBoxMenu/VBoxMenu/HBoxMenu/MBox1/VBoxButton/NewsButton" to="CanvasUI/MainUI/SBoxMenu/VBoxMenu/HBoxMenu" method="_on_news_button_pressed"]
+[connection signal="pressed" from="CanvasUI/MainUI/SBoxMenu/VBoxMenu/HBoxMenu/MBox1/VBoxButton/GuideButton" to="CanvasUI/MainUI/SBoxMenu/VBoxMenu/HBoxMenu" method="_on_guide_button_pressed"]
+[connection signal="pressed" from="CanvasUI/MainUI/SBoxMenu/VBoxMenu/HBoxMenu/MBox1/VBoxButton/CreditsButton" to="CanvasUI/MainUI/SBoxMenu/VBoxMenu/HBoxMenu" method="_on_credits_button_pressed"]
+[connection signal="pressed" from="CanvasUI/MainUI/SBoxMenu/VBoxMenu/HBoxMenu/MBox1/VBoxButton/ExitButton" to="CanvasUI/MainUI/SBoxMenu/VBoxMenu/HBoxMenu" method="_on_exit_button_pressed"]
 [connection signal="pressed" from="CanvasUI/MainUI/SBoxMenu/VBoxMenu/HBoxMenu/SidePanel/MenuBox/StartButton" to="CanvasUI/MainUI/SBoxMenu/VBoxMenu/HBoxMenu" method="_on_start_button_pressed"]
 [connection signal="toggled" from="CanvasUI/MainUI/SBoxMenu/VBoxMenu/HBoxMenu/SidePanel/OptionsBox/UseCheatCheckBox2" to="CanvasUI/MainUI/SBoxMenu/VBoxMenu/HBoxMenu" method="_on_use_cheat_check_box_toggled"]
 [connection signal="toggled" from="CanvasUI/MainUI/SBoxMenu/VBoxMenu/HBoxMenu/SidePanel/OptionsBox/LogScaleCheckBox" to="CanvasUI/MainUI/SBoxMenu/VBoxMenu/HBoxMenu" method="_on_log_scale_check_box_toggled"]

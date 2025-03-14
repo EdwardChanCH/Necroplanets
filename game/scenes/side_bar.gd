@@ -32,7 +32,7 @@ func open_side_menu(_id: int = -1) -> void:
 		if ($SidePanel.visible):
 			scroll_box.set_custom_minimum_size(Vector2(520, 0))
 		else:
-			scroll_box.set_custom_minimum_size(Vector2(100, 0))
+			scroll_box.set_custom_minimum_size(Vector2(120, 0))
 		return
 	elif (_id != -1):
 		get_side_menu(current_menu_id).set_visible(false)
@@ -44,7 +44,7 @@ func open_side_menu(_id: int = -1) -> void:
 
 func close_side_menu() -> void:
 	$SidePanel.set_visible(false)
-	scroll_box.set_custom_minimum_size(Vector2(100, 0))
+	scroll_box.set_custom_minimum_size(Vector2(120, 0))
 	pass
 
 func _on_menu_button_pressed() -> void:
