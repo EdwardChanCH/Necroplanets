@@ -17,6 +17,7 @@ radius_au = 39.5
 angle_deg = 270.0
 planet_progress = 100.0
 alien_count = 10
+alien_tier = 1
 
 [node name="Mercury" parent="." instance=ExtResource("3_5lone")]
 planet_id = 1
@@ -24,6 +25,7 @@ planet_name = "MERCURY"
 radius_au = 0.4
 angle_deg = 140.0
 human_count = 1
+human_tier = 1
 
 [node name="Venus" parent="." instance=ExtResource("3_5lone")]
 planet_id = 2
@@ -37,7 +39,8 @@ planet_id = 3
 planet_name = "EARTH"
 radius_au = 1.0
 angle_deg = 70.0
-human_count = 10
+human_count = 1
+human_tier = 10
 
 [node name="Mars" parent="." instance=ExtResource("3_5lone")]
 planet_id = 4
@@ -45,6 +48,7 @@ planet_name = "MARS"
 radius_au = 1.5
 angle_deg = 20.0
 human_count = 1
+human_tier = 1
 
 [node name="Jupiter" parent="." instance=ExtResource("3_5lone")]
 planet_id = 5

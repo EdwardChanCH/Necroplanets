@@ -60,16 +60,12 @@ func set_convoy(_route: Route2D, _direction: bool, _ship_count: int, _is_alien: 
 		$ShipCount.set_position(Vector2(-200, 50))
 	else:
 		$ShipCount.set_position(Vector2(-200, -150))
+	
 	route.path.add_child(self)
+	set_progress_ratio(completion)
 	pass
 
 func takeoff() -> void:
-	if (is_alien):
-		$Sprite.set_texture(icon_alien)
-	else:
-		$Sprite.set_texture(icon_human)
-	$Sprite.show()
-	
 	if (is_alien):
 		start.set_alien_count(-ship_count, true)
 		end.set_alien_incoming(+ship_count, true)
@@ -79,6 +75,12 @@ func takeoff() -> void:
 	
 	self.process_mode = Node.PROCESS_MODE_INHERIT
 	has_takenoff.emit()
+	
+	if (is_alien):
+		$Sprite.set_texture(icon_alien)
+	else:
+		$Sprite.set_texture(icon_human)
+	$Sprite.show()
 	pass
 
 func landing() -> void:

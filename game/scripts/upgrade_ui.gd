@@ -48,7 +48,11 @@ func _on_upgrade_yes_button_pressed() -> void:
 	set_visible(false)
 	solar_system.deselect_all()
 	if (location != null):
-		if (location.alien_count >= cost or Global.use_cheat):
+		if (Global.use_cheat):
+			location.set_alien_count(0, true)
+			location.set_alien_tier(1, true)
+			show_ui(location)
+		elif (location.alien_count >= cost):
 			location.set_alien_count(-cost, true)
 			location.set_alien_tier(1, true)
 			show_ui(location)

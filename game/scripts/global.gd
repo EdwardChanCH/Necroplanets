@@ -10,6 +10,8 @@ signal changed_game_clock_period
 signal pulsed_game_clock
 signal deselectd_ui
 
+@onready var rng: RandomNumberGenerator = RandomNumberGenerator.new()
+
 var has_cheated: bool = false
 var use_cheat: bool = false
 var use_log_scale_map: bool = true
@@ -18,6 +20,7 @@ var bgm_value: float = 0.5
 var sfx_value: float = 0.5
 var cursor_shape: Input.CursorShape = Input.CURSOR_ARROW
 var game_clock_period: float = 1 # second(s)
+
 var _game_clock_sum: float = 0
 
 var alien_accel: float = 1

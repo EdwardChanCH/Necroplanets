@@ -106,8 +106,10 @@ func redraw_map() -> void:
 	pass
 
 func transfer_ships(source: Planet, destination: Planet, amount: int, is_alien: bool, accel: float):
-	if (amount <= 0):
+	if (is_alien and amount > 0):
 		deselect_all()
+	
+	if (amount <= 0):
 		return
 	
 	var convoy: Convoy2D = convoy_2d_res.instantiate()
@@ -151,7 +153,6 @@ func _on_planet_deselected(_id: int) -> void:
 	pass
 
 func _on_convoy_has_takenoff() -> void:
-	deselect_all()
 	pass
 
 func _on_convoy_has_terminated() -> void:
