@@ -25,20 +25,14 @@ func _ready() -> void:
 	pass
 
 func _process(delta: float) -> void:
-	time_taken += delta
+	time_taken += delta * (1 / Global.game_clock_period)
 	completion = time_taken / duration
 	
 	if (!direction):
 		completion = 1 - completion
 	
 	if (completion < 0 or completion > 1):
-		if (is_alien):
-			end.set_alien_count(ship_count, true)
-			end.set_alien_incoming(-ship_count, true)
-		else:
-			end.set_human_count(ship_count, true)
-			end.set_human_incoming(-ship_count, true)
-		terminate()
+		landing()
 	else:
 		set_progress_ratio(completion)
 	pass
@@ -78,13 +72,23 @@ func takeoff() -> void:
 	
 	if (is_alien):
 		start.set_alien_count(-ship_count, true)
-		end.alien_incoming += ship_count
+		end.set_alien_incoming(+ship_count, true)
 	else:
 		start.set_human_count(-ship_count, true)
-		end.human_incoming += ship_count
+		end.set_human_incoming(+ship_count, true)
 	
 	self.process_mode = Node.PROCESS_MODE_INHERIT
 	has_takenoff.emit()
+	pass
+
+func landing() -> void:
+	if (is_alien):
+		end.set_alien_count(ship_count, true)
+		end.set_alien_incoming(-ship_count, true)
+	else:
+		end.set_human_count(ship_count, true)
+		end.set_human_incoming(-ship_count, true)
+	terminate()
 	pass
 
 func terminate() -> void:

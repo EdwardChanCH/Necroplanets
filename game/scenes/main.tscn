@@ -1,4 +1,4 @@
-[gd_scene load_steps=18 format=3 uid="uid://dr06sl28j0mq"]
+[gd_scene load_steps=19 format=3 uid="uid://dr06sl28j0mq"]
 
 [ext_resource type="Script" uid="uid://j86twos6ww6k" path="res://scripts/camera.gd" id="1_0wfyh"]
 [ext_resource type="PackedScene" uid="uid://bbwps7161hhpl" path="res://scenes/solar_system.tscn" id="1_o5qli"]
@@ -15,6 +15,7 @@
 [ext_resource type="Texture2D" uid="uid://b7h65jkwd557t" path="res://assets/icon_help.png" id="10_jbj1t"]
 [ext_resource type="Texture2D" uid="uid://bn1fhl4cioy2y" path="res://assets/icon_credits.png" id="11_muem4"]
 [ext_resource type="Texture2D" uid="uid://bfwxaftkxe75d" path="res://assets/icon_exit.png" id="12_dp3eg"]
+[ext_resource type="Script" uid="uid://bu1aolma220cc" path="res://scripts/upgrade_ui.gd" id="16_jbj1t"]
 
 [sub_resource type="Gradient" id="Gradient_sugp2"]
 offsets = PackedFloat32Array(0)
@@ -73,8 +74,9 @@ motion_mirroring = Vector2(1920, 1080)
 position = Vector2(960, 540)
 texture = ExtResource("3_tbgi4")
 
-[node name="SolarSystem" parent="." node_paths=PackedStringArray("convoyUI") instance=ExtResource("1_o5qli")]
+[node name="SolarSystem" parent="." node_paths=PackedStringArray("convoyUI", "upgradeUI") instance=ExtResource("1_o5qli")]
 convoyUI = NodePath("../CanvasUI/MainUI/ConvoyUI")
+upgradeUI = NodePath("../CanvasUI/MainUI/UpgradeUI")
 
 [node name="Camera" type="Camera2D" parent="."]
 position = Vector2(1200, 800)
@@ -180,6 +182,7 @@ size_flags_horizontal = 3
 mouse_filter = 2
 
 [node name="MenuBox" type="VBoxContainer" parent="CanvasUI/MainUI/SBoxMenu/VBoxMenu/HBoxMenu/SidePanel"]
+visible = false
 layout_mode = 2
 mouse_filter = 2
 
@@ -213,6 +216,11 @@ fleet commander.
 horizontal_alignment = 1
 vertical_alignment = 1
 autowrap_mode = 3
+
+[node name="GuideButton" type="Button" parent="CanvasUI/MainUI/SBoxMenu/VBoxMenu/HBoxMenu/SidePanel/MenuBox"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+text = "How To Play"
 
 [node name="StartButton" type="Button" parent="CanvasUI/MainUI/SBoxMenu/VBoxMenu/HBoxMenu/SidePanel/MenuBox"]
 layout_mode = 2
@@ -292,6 +300,20 @@ step = 0.01
 tick_count = 5
 ticks_on_borders = true
 
+[node name="GameSpeed" type="Label" parent="CanvasUI/MainUI/SBoxMenu/VBoxMenu/HBoxMenu/SidePanel/OptionsBox"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+text = "
+Game Speed (1.0x)"
+
+[node name="GameSpeedSlider" type="HSlider" parent="CanvasUI/MainUI/SBoxMenu/VBoxMenu/HBoxMenu/SidePanel/OptionsBox"]
+layout_mode = 2
+min_value = -2.0
+max_value = 4.0
+value = 1.0
+tick_count = 7
+ticks_on_borders = true
+
 [node name="NewsBox" type="VBoxContainer" parent="CanvasUI/MainUI/SBoxMenu/VBoxMenu/HBoxMenu/SidePanel"]
 visible = false
 layout_mode = 2
@@ -342,29 +364,41 @@ custom_minimum_size = Vector2(0, 70)
 layout_mode = 2
 theme_override_font_sizes/font_size = 24
 text = "
-   [Controls]
+[Controls]
 
-   Left Mouse Button:
-   - Drag to move camera
-   - Click on 2 planets to reroute
+Left Mouse Button:
+- Drag to move camera
+- Click on 2 planets to reroute
+- Double-Click on a broken planet
+   to upgrade it
 
-   Scroll Wheel:
-   - Scroll to zoom in/ out camera
+Right Mouse Button:
+- Deselect planets
 
-   [Mechanics]
+Scroll Wheel:
+- Scroll to zoom in/ out camera
 
-   - Win by breaking 9 planets
-   - Lose by having 0 UFOs
+[Mechanics]
 
-   - Parked UFOs can:
-      - Attack rockets
-      - Attack planets
-      - Build UFOs on necroplanets
+- Win by breaking 9 planets
+- Lose by having 0 UFOs
 
-   - Parked Rockets can:
-      - Attack UFOs
-      - Defend planets
-      - Build rockets on planets"
+- Parked UFOs can:
+--- Attack Rockets
+--- Attack planets
+     (convert to broken planets)
+--- Defend broken planets
+--- Upgrade broken planets
+     (by selling UFOs)
+
+- Parked Rockets can:
+--- Attack UFOs
+--- Defend planets
+--- Downgrade broken planets
+     (by attacking)
+
+
+"
 vertical_alignment = 1
 autowrap_mode = 3
 
@@ -386,11 +420,23 @@ custom_minimum_size = Vector2(0, 70)
 layout_mode = 2
 theme_override_font_sizes/font_size = 24
 text = "
-   Edward Chan
-   - programming
-   - art
-   - sound
-   - etc."
+Edward Chan :
+- programming
+- art
+- music & sfx
+- etc.
+
+AcuteBee :
+- playtesting
+- code review
+- ui/ux review
+
+Yuting :
+- playtestng
+- music review
+
+Jacob
+- playtesting"
 vertical_alignment = 1
 autowrap_mode = 3
 
@@ -454,11 +500,11 @@ layout_mode = 2
 theme_override_font_sizes/font_size = 16
 text = "   Orbit:"
 
-[node name="HBox2" type="HBoxContainer" parent="CanvasUI/MainUI/ConvoyUI/VBox"]
+[node name="HBox1" type="HBoxContainer" parent="CanvasUI/MainUI/ConvoyUI/VBox"]
 layout_mode = 2
 mouse_filter = 2
 
-[node name="SourceLabel" type="Label" parent="CanvasUI/MainUI/ConvoyUI/VBox/HBox2"]
+[node name="SourceLabel" type="Label" parent="CanvasUI/MainUI/ConvoyUI/VBox/HBox1"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_stretch_ratio = 4.0
@@ -466,14 +512,14 @@ theme_override_font_sizes/font_size = 24
 text = "Source"
 horizontal_alignment = 1
 
-[node name="ArrowLabel" type="Label" parent="CanvasUI/MainUI/ConvoyUI/VBox/HBox2"]
+[node name="ArrowLabel" type="Label" parent="CanvasUI/MainUI/ConvoyUI/VBox/HBox1"]
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_font_sizes/font_size = 24
 text = ">>"
 horizontal_alignment = 1
 
-[node name="DestinationLabel" type="Label" parent="CanvasUI/MainUI/ConvoyUI/VBox/HBox2"]
+[node name="DestinationLabel" type="Label" parent="CanvasUI/MainUI/ConvoyUI/VBox/HBox1"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_stretch_ratio = 4.0
@@ -505,19 +551,135 @@ custom_minimum_size = Vector2(0, 30)
 layout_mode = 2
 mouse_filter = 2
 
-[node name="HBox3" type="HBoxContainer" parent="CanvasUI/MainUI/ConvoyUI/VBox"]
+[node name="HBox2" type="HBoxContainer" parent="CanvasUI/MainUI/ConvoyUI/VBox"]
 layout_mode = 2
 size_flags_vertical = 3
 mouse_filter = 2
 
-[node name="ConvoyYesButton" type="Button" parent="CanvasUI/MainUI/ConvoyUI/VBox/HBox3"]
+[node name="ConvoyYesButton" type="Button" parent="CanvasUI/MainUI/ConvoyUI/VBox/HBox2"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_stretch_ratio = 3.0
 theme_override_font_sizes/font_size = 24
 text = "Attack!"
 
-[node name="ConvoyNoButton" type="Button" parent="CanvasUI/MainUI/ConvoyUI/VBox/HBox3"]
+[node name="ConvoyNoButton" type="Button" parent="CanvasUI/MainUI/ConvoyUI/VBox/HBox2"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 24
+text = "Cancel"
+
+[node name="UpgradeUI" type="Window" parent="CanvasUI/MainUI" node_paths=PackedStringArray("solar_system")]
+auto_translate_mode = 1
+title = "Upgrade Planet (UFO Factory)"
+initial_position = 2
+size = Vector2i(500, 250)
+visible = false
+always_on_top = true
+script = ExtResource("16_jbj1t")
+solar_system = NodePath("../../../SolarSystem")
+
+[node name="VBox" type="VBoxContainer" parent="CanvasUI/MainUI/UpgradeUI"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="Text1" type="Label" parent="CanvasUI/MainUI/UpgradeUI/VBox"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 16
+text = "   Factory:"
+
+[node name="HBox1" type="HBoxContainer" parent="CanvasUI/MainUI/UpgradeUI/VBox"]
+layout_mode = 2
+mouse_filter = 2
+
+[node name="OldTierLabel" type="Label" parent="CanvasUI/MainUI/UpgradeUI/VBox/HBox1"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 4.0
+theme_override_font_sizes/font_size = 24
+text = "Planet (lv.0)"
+horizontal_alignment = 1
+
+[node name="ArrowLabel" type="Label" parent="CanvasUI/MainUI/UpgradeUI/VBox/HBox1"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 24
+text = ">>"
+horizontal_alignment = 1
+
+[node name="NewTierLabel" type="Label" parent="CanvasUI/MainUI/UpgradeUI/VBox/HBox1"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 4.0
+theme_override_font_sizes/font_size = 24
+text = "Planet (lv.1)"
+horizontal_alignment = 1
+
+[node name="HBox2" type="HBoxContainer" parent="CanvasUI/MainUI/UpgradeUI/VBox"]
+layout_mode = 2
+mouse_filter = 2
+
+[node name="BenefitLabel" type="Label" parent="CanvasUI/MainUI/UpgradeUI/VBox/HBox2"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 4.0
+theme_override_font_sizes/font_size = 16
+text = "
+   Production Rate:   +1 ship/s"
+
+[node name="HBox3" type="HBoxContainer" parent="CanvasUI/MainUI/UpgradeUI/VBox"]
+layout_mode = 2
+mouse_filter = 2
+
+[node name="Text2" type="Label" parent="CanvasUI/MainUI/UpgradeUI/VBox/HBox3"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 1
+size_flags_stretch_ratio = 0.5
+theme_override_font_sizes/font_size = 16
+text = "
+   Ship Cost:"
+vertical_alignment = 1
+
+[node name="AmountLabel" type="Label" parent="CanvasUI/MainUI/UpgradeUI/VBox/HBox3"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 1
+theme_override_font_sizes/font_size = 24
+text = "0 / 0"
+horizontal_alignment = 1
+vertical_alignment = 2
+
+[node name="Spacer" type="Control" parent="CanvasUI/MainUI/UpgradeUI/VBox/HBox3"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 0.5
+
+[node name="PercentageBar" type="ProgressBar" parent="CanvasUI/MainUI/UpgradeUI/VBox"]
+layout_mode = 2
+value = 100.0
+
+[node name="Spacer" type="Control" parent="CanvasUI/MainUI/UpgradeUI/VBox"]
+custom_minimum_size = Vector2(0, 4)
+layout_mode = 2
+
+[node name="HBox4" type="HBoxContainer" parent="CanvasUI/MainUI/UpgradeUI/VBox"]
+layout_mode = 2
+size_flags_vertical = 3
+mouse_filter = 2
+
+[node name="UpgradeYesButton" type="Button" parent="CanvasUI/MainUI/UpgradeUI/VBox/HBox4"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 3.0
+theme_override_font_sizes/font_size = 24
+text = "Upgrade!"
+
+[node name="UpgradeNoButton" type="Button" parent="CanvasUI/MainUI/UpgradeUI/VBox/HBox4"]
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_font_sizes/font_size = 24
@@ -530,6 +692,7 @@ text = "Cancel"
 [connection signal="pressed" from="CanvasUI/MainUI/SBoxMenu/VBoxMenu/HBoxMenu/MBox1/VBoxButton/GuideButton" to="CanvasUI/MainUI/SBoxMenu/VBoxMenu/HBoxMenu" method="_on_guide_button_pressed"]
 [connection signal="pressed" from="CanvasUI/MainUI/SBoxMenu/VBoxMenu/HBoxMenu/MBox1/VBoxButton/CreditsButton" to="CanvasUI/MainUI/SBoxMenu/VBoxMenu/HBoxMenu" method="_on_credits_button_pressed"]
 [connection signal="pressed" from="CanvasUI/MainUI/SBoxMenu/VBoxMenu/HBoxMenu/MBox1/VBoxButton/ExitButton" to="CanvasUI/MainUI/SBoxMenu/VBoxMenu/HBoxMenu" method="_on_exit_button_pressed"]
+[connection signal="pressed" from="CanvasUI/MainUI/SBoxMenu/VBoxMenu/HBoxMenu/SidePanel/MenuBox/GuideButton" to="CanvasUI/MainUI/SBoxMenu/VBoxMenu/HBoxMenu" method="_on_guide_button_pressed"]
 [connection signal="pressed" from="CanvasUI/MainUI/SBoxMenu/VBoxMenu/HBoxMenu/SidePanel/MenuBox/StartButton" to="CanvasUI/MainUI/SBoxMenu/VBoxMenu/HBoxMenu" method="_on_start_button_pressed"]
 [connection signal="pressed" from="CanvasUI/MainUI/SBoxMenu/VBoxMenu/HBoxMenu/SidePanel/OptionsBox/CenterCameraButton" to="CanvasUI/MainUI/SBoxMenu/VBoxMenu/HBoxMenu" method="_on_center_camera_button_pressed"]
 [connection signal="toggled" from="CanvasUI/MainUI/SBoxMenu/VBoxMenu/HBoxMenu/SidePanel/OptionsBox/UseCheatCheckBox" to="CanvasUI/MainUI/SBoxMenu/VBoxMenu/HBoxMenu" method="_on_use_cheat_check_box_toggled"]
@@ -537,9 +700,13 @@ text = "Cancel"
 [connection signal="toggled" from="CanvasUI/MainUI/SBoxMenu/VBoxMenu/HBoxMenu/SidePanel/OptionsBox/FOVZoomCheckBox" to="CanvasUI/MainUI/SBoxMenu/VBoxMenu/HBoxMenu" method="_on_fov_zoom_check_box_toggled"]
 [connection signal="value_changed" from="CanvasUI/MainUI/SBoxMenu/VBoxMenu/HBoxMenu/SidePanel/OptionsBox/BGMSlider" to="CanvasUI/MainUI/SBoxMenu/VBoxMenu/HBoxMenu" method="_on_bgm_slider_value_changed"]
 [connection signal="value_changed" from="CanvasUI/MainUI/SBoxMenu/VBoxMenu/HBoxMenu/SidePanel/OptionsBox/SFXSlider" to="CanvasUI/MainUI/SBoxMenu/VBoxMenu/HBoxMenu" method="_on_sfx_slider_value_changed"]
+[connection signal="value_changed" from="CanvasUI/MainUI/SBoxMenu/VBoxMenu/HBoxMenu/SidePanel/OptionsBox/GameSpeedSlider" to="CanvasUI/MainUI/SBoxMenu/VBoxMenu/HBoxMenu" method="_on_game_speed_slider_value_changed"]
 [connection signal="pressed" from="CanvasUI/MainUI/SBoxMenu/VBoxMenu/HBoxMenu/SidePanel/ExitBox/ExitNoButton" to="CanvasUI/MainUI/SBoxMenu/VBoxMenu/HBoxMenu" method="_on_exit_no_button_pressed"]
 [connection signal="pressed" from="CanvasUI/MainUI/SBoxMenu/VBoxMenu/HBoxMenu/SidePanel/ExitBox/ExitYesButton" to="CanvasUI/MainUI/SBoxMenu/VBoxMenu/HBoxMenu" method="_on_exit_yes_button_pressed"]
 [connection signal="close_requested" from="CanvasUI/MainUI/ConvoyUI" to="CanvasUI/MainUI/ConvoyUI" method="_on_close_requested"]
 [connection signal="value_changed" from="CanvasUI/MainUI/ConvoyUI/VBox/AmountSlider" to="CanvasUI/MainUI/ConvoyUI" method="_on_amount_slider_value_changed"]
-[connection signal="pressed" from="CanvasUI/MainUI/ConvoyUI/VBox/HBox3/ConvoyYesButton" to="CanvasUI/MainUI/ConvoyUI" method="_on_convoy_yes_button_pressed"]
-[connection signal="pressed" from="CanvasUI/MainUI/ConvoyUI/VBox/HBox3/ConvoyNoButton" to="CanvasUI/MainUI/ConvoyUI" method="_on_convoy_no_button_pressed"]
+[connection signal="pressed" from="CanvasUI/MainUI/ConvoyUI/VBox/HBox2/ConvoyYesButton" to="CanvasUI/MainUI/ConvoyUI" method="_on_convoy_yes_button_pressed"]
+[connection signal="pressed" from="CanvasUI/MainUI/ConvoyUI/VBox/HBox2/ConvoyNoButton" to="CanvasUI/MainUI/ConvoyUI" method="_on_convoy_no_button_pressed"]
+[connection signal="close_requested" from="CanvasUI/MainUI/UpgradeUI" to="CanvasUI/MainUI/UpgradeUI" method="_on_close_requested"]
+[connection signal="pressed" from="CanvasUI/MainUI/UpgradeUI/VBox/HBox4/UpgradeYesButton" to="CanvasUI/MainUI/UpgradeUI" method="_on_upgrade_yes_button_pressed"]
+[connection signal="pressed" from="CanvasUI/MainUI/UpgradeUI/VBox/HBox4/UpgradeNoButton" to="CanvasUI/MainUI/UpgradeUI" method="_on_upgrade_no_button_pressed"]

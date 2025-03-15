@@ -5,6 +5,7 @@ const route_2d_res: PackedScene = preload("res://scenes/route_2d.tscn")
 const convoy_2d_res: PackedScene = preload("res://scenes/convoy_2d.tscn")
 
 @export var convoyUI: ConvoyUI
+@export var upgradeUI: UpgradeUI
 
 var planets: Array[Planet] = []
 var routes: Dictionary[int, Route2D] = {}
@@ -23,8 +24,11 @@ func _ready() -> void:
 	planets.push_back($Neptune)
 	
 	for p: Planet in planets:
+		Global.pulsed_game_clock.connect(p._on_pulsed_game_clock)
 		p.planet_selected.connect(_on_planet_selected)
 		p.planet_deselected.connect(_on_planet_deselected)
+		p.alien_count_changed.connect(convoyUI.update_ship_count)
+		p.alien_count_changed.connect(upgradeUI.update_ship_count)
 		pass
 	
 	add_route($Earth, $Mercury)
@@ -141,6 +145,8 @@ func _on_planet_selected(_id: int) -> void:
 	pass
 
 func _on_planet_deselected(_id: int) -> void:
+	if (planets[selected_ids[0]].fractured):
+		upgradeUI.show_ui(planets[_id])
 	deselect_all()
 	pass
 
@@ -151,4 +157,5 @@ func _on_convoy_has_takenoff() -> void:
 func _on_convoy_has_terminated() -> void:
 	redraw_map()
 	convoyUI.update_ship_count()
+	upgradeUI.update_ship_count()
 	pass

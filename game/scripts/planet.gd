@@ -3,21 +3,10 @@ extends Node2D
 
 signal planet_selected(planet_id: int)
 signal planet_deselected(planet_id: int)
+signal alien_count_changed
 
 const icon_planet: CompressedTexture2D = preload("res://textures/icon_planet.tres")
 const icon_necroplanet: CompressedTexture2D = preload("res://textures/icon_necroplanet.tres")
-
-enum STATUS {
-	EMPTY      = 0, #  no alien,  no human, intact
-	ABANDONED  = 1, #  no alien,  no human, fractured
-	PRODUCING  = 2, #  no alien, has human, intact
-	BLOCKING   = 3, #  no alien, has human, fractured
-	BOMBARDING = 4, # has alien,  no human, intact
-	MINING     = 5, # has alien,  no human, fractured
-	ATTACKING  = 6, # has alien, has human, intact
-	DEFENDING  = 7, # has alien, has human, fractured
-	ERROR      = -1 # error
-	}
 
 const AU: float = 1000
 const spacing: float = 100
@@ -32,9 +21,10 @@ const selected_color: Color = Color(0, 0.75, 0, 1)
 @export var planet_progress: float = 0
 @export var alien_count: int = 0
 @export var human_count: int = 0
+@export var alien_tier: int = 0
+@export var human_tier: int = 0
 @export var fractured: bool = false
 
-var status: STATUS = STATUS.EMPTY
 var neighbours: Dictionary[int, Route2D] = {}
 var alien_incoming: int = 0
 var human_incoming: int = 0
@@ -44,6 +34,8 @@ func logx(value: float, base: float) -> float:
 	base = absf(base)
 	if (value < 0):
 		return -log(-value) / log(base)
+	elif (value == 0):
+		return 0
 	else:
 		return log(value) / log(base)
 
@@ -56,13 +48,58 @@ func _ready() -> void:
 	set_human_count(human_count)
 	pass
 
+func _on_pulsed_game_clock() -> void:
+	# gameplay logic
+	var alien_death: int = 0
+	var human_death: int = 0
+	
+	if (alien_count > 0 and human_count > 0):
+		# has alien and humam, ship-to-ship combat
+		alien_death = max(1, floorf(0.1 * human_count))
+		human_death = max(1, floorf(0.1 * alien_count))
+		set_alien_count(-alien_death, true) # decrement ships
+		set_human_count(-human_death, true) # decrement ships
+		pass
+	else:
+		if (alien_count > 0):
+			# has alien only
+			if (human_tier > 0):
+				set_human_tier(-1, true) # attack factory
+			else:
+				set_planet_progress(logx(alien_count, 10) + 1, true) # attack planet
+			pass
+		
+		if (human_count > 0):
+			# has human only
+			if (alien_tier > 0):
+				set_alien_tier(-1, true) # attack factory
+			pass
+		
+		if (human_count <= 0 and fractured and alien_tier > 0):
+			# fractured planet, has factory, not attacked
+			set_alien_count(alien_tier, true) # produce ships
+			pass
+		
+		if (alien_count <= 0 and !fractured and human_tier > 0):
+			# intact planet, has factory, not attacked
+			set_human_count(human_tier, true) # produce ships
+			pass
+	pass
+
 func set_planet_id(id: int) -> void:
 	planet_id = id
 	pass
 
 func set_planet_name(planet: String) -> void:
 	planet_name = planet.to_upper()
-	$PlanetLabel.set_text(planet_name + " (" + str(floori(planet_progress)) + "%)")
+	redraw_planet_info()
+	pass
+
+func redraw_planet_info() -> void:
+	if (alien_tier <= 0):
+		$PlanetInfo.set_text(planet_name + " (" + str(floori(planet_progress)) + "%)")
+	else:
+		$PlanetInfo.set_text(planet_name + " (lv." + str(alien_tier) + ")")
 	pass
 
 func set_planet_position(radius: float, angle: float, relative: bool = false) -> void:
@@ -106,6 +143,7 @@ func set_planet_progress(amount: float, relative: bool = false) -> void:
 		$PlanetIcon.set_texture(icon_necroplanet)
 	
 	$ProgressBar.set_value(planet_progress)
+	redraw_planet_info()
 	pass
 
 func set_alien_count(amount: int, relative: bool = false) -> void:
@@ -114,8 +152,12 @@ func set_alien_count(amount: int, relative: bool = false) -> void:
 	else:
 		alien_count = amount
 	
-	$AlienLabel.set_text(str(alien_count))
-	redraw_human_count()
+	alien_count = max(0, alien_count)
+	
+	redraw_alien_count()
+	redraw_human_count() # Reveal human count if alien count > 0
+	
+	alien_count_changed.emit()
 	pass
 
 func set_human_count(amount: int, relative: bool = false) -> void:
@@ -124,19 +166,41 @@ func set_human_count(amount: int, relative: bool = false) -> void:
 	else:
 		human_count = amount
 	
+	human_count = max(0, human_count)
+	
 	redraw_human_count()
+	pass
+
+func set_alien_tier(tier: int, relative: bool = false) -> void:
+	if (relative):
+		alien_tier += tier
+	else:
+		alien_tier = tier
+	
+	redraw_planet_info()
+	pass
+
+func set_human_tier(tier: int, relative: bool = false) -> void:
+	if (relative):
+		human_tier += tier
+	else:
+		human_tier = tier
+	pass
+
+func redraw_alien_count() -> void:
+	$AlienCount.set_text(str(alien_count))
 	pass
 
 func redraw_human_count() -> void:
 	if (Global.use_cheat):
-		$HumanLabel.set_text(str(human_count))
+		$HumanCount.set_text(str(human_count))
 	elif (alien_count > 0):
-		$HumanLabel.set_text(str(human_count))
+		$HumanCount.set_text(str(human_count))
 		guessed_human_count = human_count
 	elif (guessed_human_count >= 0):
-		$HumanLabel.set_text(str(guessed_human_count) + "?")
+		$HumanCount.set_text(str(guessed_human_count) + "?")
 	else:
-		$HumanLabel.set_text("??")
+		$HumanCount.set_text("??")
 	pass
 
 func set_alien_incoming(amount: int, relative: bool = false) -> void:
@@ -151,27 +215,6 @@ func set_human_incoming(amount: int, relative: bool = false) -> void:
 		human_incoming += amount
 	else:
 		human_incoming = amount
-	pass
-
-func update_status() -> void:
-	if (alien_count == 0 and human_count == 0 and !fractured):
-		status = STATUS.EMPTY
-	elif (alien_count == 0 and human_count == 0 and fractured):
-		status = STATUS.ABANDONED
-	elif (alien_count == 0 and human_count > 0 and !fractured):
-		status = STATUS.PRODUCING
-	elif (alien_count == 0 and human_count > 0 and fractured):
-		status = STATUS.BLOCKING
-	elif (alien_count > 0 and human_count == 0 and !fractured):
-		status = STATUS.BOMBARDING
-	elif (alien_count > 0 and human_count == 0 and fractured):
-		status = STATUS.MINING
-	elif (alien_count > 0 and human_count > 0 and !fractured):
-		status = STATUS.ATTACKING
-	elif (alien_count > 0 and human_count > 0 and fractured):
-		status = STATUS.DEFENDING
-	else:
-		status = STATUS.ERROR
 	pass
 
 func set_button(toggled_on: bool) -> void:

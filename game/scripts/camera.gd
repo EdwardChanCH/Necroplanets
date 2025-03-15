@@ -57,6 +57,9 @@ func _process(_delta: float) -> void:
 	pass
 
 func _unhandled_input(event: InputEvent) -> void:
+	if event.is_action_pressed("deselect_ui"):
+		Global.deselect_ui()
+	
 	if event.is_action_pressed("camera_zoom_in"):
 		camera_zoom_target += camera_zoom_step
 		if (camera_zoom_target > camera_zoom_max):

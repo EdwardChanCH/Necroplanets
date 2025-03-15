@@ -110,3 +110,10 @@ func _on_bgm_slider_value_changed(value: float) -> void:
 func _on_sfx_slider_value_changed(value: float) -> void:
 	Global.change_sfx_value(value)
 	pass
+
+func _on_game_speed_slider_value_changed(value: float) -> void:
+	if (value < 1):
+		value = 1 - (1 - value) * 0.25
+	$SidePanel/OptionsBox/GameSpeed.set_text("\nGame Speed (" + str(value) + "x)")
+	Global.change_game_clock_period(1 / value)
+	pass

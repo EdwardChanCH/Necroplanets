@@ -14,8 +14,8 @@ func show_ui(_source: Planet, _destination: Planet) -> void:
 	set_visible(true)
 	source = _source
 	destination = _destination
-	$VBox/HBox2/SourceLabel.set_text(source.planet_name)
-	$VBox/HBox2/DestinationLabel.set_text(destination.planet_name)
+	$VBox/HBox1/SourceLabel.set_text(source.planet_name)
+	$VBox/HBox1/DestinationLabel.set_text(destination.planet_name)
 	update_ship_count()
 	$VBox/AmountSlider.set_value($VBox/AmountSlider.max_value)
 	pass
@@ -35,7 +35,8 @@ func _on_amount_slider_value_changed(value: float) -> void:
 
 func _on_convoy_yes_button_pressed() -> void:
 	set_visible(false)
-	solar_system.transfer_ships(source, destination, $VBox/AmountSlider.value, true, Global.alien_accel)
+	if (source != null and destination != null):
+		solar_system.transfer_ships(source, destination, $VBox/AmountSlider.value, true, Global.alien_accel)
 	pass
 
 func _on_convoy_no_button_pressed() -> void:
