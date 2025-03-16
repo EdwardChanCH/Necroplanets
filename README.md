@@ -1,8 +1,6 @@
-# Necroplanet
 ![Thumbnail](banner_necroplanets.png)
 
-Itch.io: https://edward-chan.itch.io/necroplanets
-YouTube: https://www.youtube.com/watch?v=PwSAShPXFNc
+| [Itch.io](https://edward-chan.itch.io/necroplanets) | [YouTube](https://www.youtube.com/watch?v=PwSAShPXFNc) |
 
 ## 0. Copyright
 
