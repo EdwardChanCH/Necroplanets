@@ -1,44 +1,47 @@
-![Thumbnail](banner_necroplanets.png)
+# Necroplanets
 
-| [Itch.io](https://edward-chan.itch.io/necroplanets) | [YouTube](https://www.youtube.com/watch?v=PwSAShPXFNc) |
+![Thumbnail](_thumbnail.png)
 
-## 0. Copyright
+| [itch.io](https://edward-chan.itch.io/necroplanets) | [YouTube](https://www.youtube.com/watch?v=PwSAShPXFNc) |
 
-* Chun Ho Chan (Edward)
-  * edwardchanchunho@gmail.com
+## Copyright
 
-## 1. Short Description
+Developer: Edward Chan  
+
+My source code is licensed under [Apache License 2.0](https://www.apache.org/licenses/LICENSE-2.0).  
+My self-made assets are licensed under [CC BY 4.0](http://creativecommons.org/licenses/by/4.0/).  
+See also [third-party assets](#third-party-assets).  
+
+## Description
 
 This is a submission for the Lojam x GDS 2025 game jam.  
 
-Theme: Break the Solar System using tactics and economy of scale.
+Theme: Break the System  
 
 > "In 2006, humans stopped recognising Pluto as a planet. 
 > This angered the Plutonians to break apart all planets in the solar system. 
-> You are the UFO fleet commander." 
+> You are the UFO fleet commander."  
 
-## 2. Required Libraries & 3rd Party Tools
+## Dependencies
 
-* Godot 4.4
+* Godot 4.4: https://godotengine.org/download/archive/4.4-stable/
 
-## 3. How To Compile
+### How To Compile
 
-1. Open the project in Godot.
-2. Click "Project > Export" in Godot.
-  * (Note: You may need to download & install an export template first.)
+See [Exporting projects](https://docs.godotengine.org/en/4.4/tutorials/export/exporting_projects.html).  
 
-## 4. How To Run
+### How To Run
 
-1. Run the executable compiled in section 3, or play on itch.io.
+Run the compiled executable, or play this game on [itch.io](https://edward-chan.itch.io/necroplanets).  
 
-## 5. Credits
+## Credits
 
-Edward Chan: programming, art, sound, etc.
+Edward Chan: programming, game design, UI design, 2d art, sound design, story writing  
 
-Acute Bee: playtesting, code review, ui/ux review
+Special thanks to Acute Bee, Yuting, and Jacob for playtesting my game!​  
 
-Yuting: playtesting, music review
+## Third-Party Assets
 
-Jacob: playtesting
+All assets are made by myself during the jam period.  
 
 **Thank you for playing my game!**  
